@@ -17,7 +17,6 @@ public class PickupDuck : MonoBehaviour
         if (other.CompareTag("Duck"))
         {
             GetDuck(other.gameObject);
-            Debug.Log("Duck is following " + lastDuck.name);
         }
     }
 

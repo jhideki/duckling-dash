@@ -5,53 +5,70 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    private Animator anim;
-    private enum PlayerAnimationState { Idle, Moving }
-    private PlayerAnimationState currentState;
-    private Movement movement;
+    private enum PlayerAnimationState { north, south, east, west, northwest, northeast, southwest, southeast };
+    public List<Sprite> nSprites;
+    public List<Sprite> neSprites;
+    public List<Sprite> eSprites;
+    public List<Sprite> sSprites;
+    public List<Sprite> seSprites;
+    private List<Sprite> selectedSprites;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
-    private Vector2 direction;
-    private float angle;
+    public float frameRate;
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
-        movement = GetComponent<Movement>();
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        selectedSprites = eSprites;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (movement.isMoving)
+        if (!spriteRenderer.flipX && rb.velocity.x < 0f)
         {
-            currentState = PlayerAnimationState.Moving;
-
+            spriteRenderer.flipX = true;
         }
-        else
+        else if (spriteRenderer.flipX && rb.velocity.x > 0f)
         {
-            currentState = PlayerAnimationState.Idle;
+            spriteRenderer.flipX = false;
         }
 
-        RotateSprite();
-        anim.SetInteger("State", (int)currentState);
+        if (rb.velocity.magnitude > 0.1f)
+        {
+
+            SetSprite();
+        }
+
+
+        spriteRenderer.sprite = selectedSprites[0];
 
     }
 
-    void RotateSprite()
+    void SetSprite()
     {
-
-        direction = new Vector2(rb.velocity.x, rb.velocity.y).normalized;
-        angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        if (movement.isMoving)
+        if (rb.velocity.x != 0f && rb.velocity.y > 0f)
         {
-            angle += 90f;
+            selectedSprites = neSprites;
         }
-        Debug.Log(angle);
-        spriteRenderer.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        else if (rb.velocity.x != 0 && rb.velocity.y < 0)
+        {
+            selectedSprites = seSprites;
+        }
+        else if (rb.velocity.y == 0)
+        {
+            selectedSprites = eSprites;
+        }
+        else if (rb.velocity.x == 0 && rb.velocity.y > 0)
+        {
+            selectedSprites = nSprites;
+        }
+        else if (rb.velocity.x == 0 && rb.velocity.y < 0)
+        {
+            selectedSprites = sSprites;
+        }
     }
-
 }
+
