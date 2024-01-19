@@ -99,9 +99,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb03cfe46c62a574ab1e704e2d5c3782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 6
-  detectionRange: 3
   player: {fileID: 0}
+  patrolSpeed: 1
+  patrolRadius: 3
+  visionRange: 3
+  attackCooldown: 5
+  attackSpeed: 7
 --- !u!50 &5489558209707234743
 Rigidbody2D:
   serializedVersion: 4
