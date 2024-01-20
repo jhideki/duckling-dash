@@ -7,12 +7,13 @@ using Random = UnityEngine.Random;
 public class SimpleRandomWalkGenerator : AbstractGenerator
 {
     [SerializeField] private SimpleRAndomWalkSO randomwWalkParameters;
+    public Vector2Int[] boundries = new Vector2Int[4];
 
     protected override void RunProceduralGeneration()
     {
         HashSet<Vector2Int> floorPositions = RunRandomWalk();
         tileMapVisualizer.Clear();
-        tileMapVisualizer.PaintFloorTiles(floorPositions);
+        //tileMapVisualizer.PaintFloorTiles(floorPositions);
         WallGenerator.CreateWalls(floorPositions, tileMapVisualizer);
     }
 
