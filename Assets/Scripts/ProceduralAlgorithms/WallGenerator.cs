@@ -7,9 +7,8 @@ using UnityEngine;
 public static class WallGenerator
 {
 
-    public static void CreateWalls(HashSet<Vector2Int> floorPositions, TileMapVisualizer tileMapVisualizer)
+    public static void CreateWalls(HashSet<Vector2Int> floorPositions, TileMapVisualizer tileMapVisualizer, (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries)
     {
-        var boundaries = BoundryCalculator.GetCornerBoundaries(floorPositions);
         var outsideWalls = FindOutSideWalls(floorPositions, boundaries);
         var islandWalls = BoundryCalculator.GetGridLocationsNotInBoundaries(floorPositions, outsideWalls, boundaries);
 

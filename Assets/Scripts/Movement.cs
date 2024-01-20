@@ -6,6 +6,8 @@ public class Movement : MonoBehaviour
     public bool isMoving;
 
     private Rigidbody2D rb;
+    float horizontalInput;
+    float verticalInput;
 
     void Start()
     {
@@ -15,10 +17,13 @@ public class Movement : MonoBehaviour
     void Update()
     {
         // Input handling
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
 
         isMoving = rb.velocity.magnitude > 0.1f;
+    }
+    void FixedUpdate()
+    {
         // Calculate movement vector
         Vector2 movement = new Vector2(horizontalInput, verticalInput);
 
