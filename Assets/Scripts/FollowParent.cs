@@ -28,7 +28,7 @@ public class FollowParent : MonoBehaviour
         randomTarget = GetRandomPositionInBox();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (target != null && isFollowing)
         {

@@ -3,18 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Random = UnityEngine.Random;
+using Unity.VisualScripting;
 
 public class SimpleRandomWalkGenerator : AbstractGenerator
 {
     [SerializeField] private SimpleRAndomWalkSO randomwWalkParameters;
-    public Vector2Int[] boundries = new Vector2Int[4];
+    static public (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries;
+    public BoundaryData boundaryData;
+
 
     protected override void RunProceduralGeneration()
     {
         HashSet<Vector2Int> floorPositions = RunRandomWalk();
+        boundaries = BoundryCalculator.GetCornerBoundaries(floorPositions);
+
+        // Load boundary data for runtime use
+        boundaryData.topLeft = boundaries.Item1;
+        boundaryData.topRight = boundaries.Item2;
+        boundaryData.bottomLeft = boundaries.Item3;
+        boundaryData.bottomRight = boundaries.Item4;
+
         tileMapVisualizer.Clear();
         //tileMapVisualizer.PaintFloorTiles(floorPositions);
-        WallGenerator.CreateWalls(floorPositions, tileMapVisualizer);
+        WallGenerator.CreateWalls(floorPositions, tileMapVisualizer, boundaries);
+    }
+
+    public static (Vector2Int, Vector2Int, Vector2Int, Vector2Int) GetCornerBoundaries()
+    {
+        return boundaries;
     }
 
     protected HashSet<Vector2Int> RunRandomWalk()

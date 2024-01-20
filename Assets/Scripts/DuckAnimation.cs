@@ -63,8 +63,6 @@ public class DuckAnimation : MonoBehaviour
             direction = (transform.position - lastPosition).normalized;
         }
 
-        Debug.Log("changeX: " + changeX + "changeY: " + changeY);
-
         lastPosition = transform.position;
     }
 

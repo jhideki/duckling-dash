@@ -7,7 +7,7 @@ public class CameraFollow : MonoBehaviour
     public Transform target; // The target to follow
     public float smoothness = 250f; // Smoothing factor for camera movement
 
-    void Update()
+    void FixedUpdate()
     {
         if (target != null)
         {
