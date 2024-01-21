@@ -8,6 +8,7 @@ TagManager:
   - Hawk
   - Walls
   - Floor
+  - Water
   layers:
   - Default
   - TransparentFX
