@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class TileMapVisualizer : MonoBehaviour
 {
     [SerializeField] private Tilemap floorTilemap, wallTilemap;
-    [SerializeField] private TileBase floorTile, wallTop;
+    [SerializeField] private TileBase floorTile, wallTop, debugTile;
 
     public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
     {
@@ -45,6 +45,11 @@ public class TileMapVisualizer : MonoBehaviour
     internal void PaintSingleBasicWall(Vector2Int position)
     {
         PaintSingleTile(wallTilemap, wallTop, position);
+    }
+
+    internal void PaintSingleDebug(Vector2Int position)
+    {
+        PaintSingleTile(wallTilemap, debugTile, position);
     }
 
     public void Clear()

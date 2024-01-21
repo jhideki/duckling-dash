@@ -7,13 +7,15 @@ public class RepeatBackground : MonoBehaviour
 
     public GameObject backgroundPrefab; // Reference to the background prefab
     public BoundaryData boundaryData; // Reference to the boundary data
+    private BoundaryData.Boundaries boundaries; // Boundaries of the background
     public int offsetX = 12;
     public int offsetY = 5;
 
     void Start()
     {
+        boundaries = boundaryData.boundaries;
         RepeatBackgroundObjects();
-        transform.position = new Vector3(boundaryData.bottomLeft.x + offsetX, boundaryData.bottomLeft.y + offsetY, 0);
+        transform.position = new Vector3(boundaries.bottomLeft.x + offsetX, boundaries.bottomLeft.y + offsetY, 0);
     }
 
     void RepeatBackgroundObjects()
@@ -23,8 +25,8 @@ public class RepeatBackground : MonoBehaviour
         float backgroundHeight = backgroundPrefab.GetComponent<SpriteRenderer>().bounds.size.y;
 
         // Calculate the boundaries
-        Vector2Int bottomLeft = boundaryData.bottomLeft;
-        Vector2Int topRight = boundaryData.topRight;
+        Vector2Int bottomLeft = boundaries.bottomLeft;
+        Vector2Int topRight = boundaries.topRight;
         int numRight = (topRight.x - bottomLeft.x) / (int)backgroundWidth;
         int numUp = (topRight.y - bottomLeft.y) / (int)backgroundHeight;
 
