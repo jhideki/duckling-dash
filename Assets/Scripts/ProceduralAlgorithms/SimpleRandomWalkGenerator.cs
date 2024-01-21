@@ -16,7 +16,7 @@ public class SimpleRandomWalkGenerator : AbstractGenerator
     static private (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries;
     public BoundaryData boundaryData;
     private Boundaries mapBoundaries;
-    private Map map;
+    public Map map;
 
     protected override void RunProceduralGeneration()
     {
