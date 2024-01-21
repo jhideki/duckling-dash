@@ -8,6 +8,7 @@ TagManager:
   - Hawk
   - Walls
   - Floor
+  - HawkSpawner
   layers:
   - Default
   - TransparentFX

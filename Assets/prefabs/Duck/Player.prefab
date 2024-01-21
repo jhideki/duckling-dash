@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2282381273278604477}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Duck
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,15 +104,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nSprites:
   - {fileID: -1950111338, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
-  neSprites:
-  - {fileID: -45839069, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
   eSprites:
   - {fileID: -1016637724, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
   sSprites:
   - {fileID: 1327957048, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
-  seSprites:
-  - {fileID: 1526068312, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
-  frameRate: 0
+  sIdleSprites:
+  - {fileID: -1016637724, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
+  eIdleSprites:
+  - {fileID: -1016637724, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
+  nIdleSprites:
+  - {fileID: -1950111338, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
+  frameRate: 5
 --- !u!114 &2782548122329473124
 MonoBehaviour:
   m_ObjectHideFlags: 0
