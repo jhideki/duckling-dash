@@ -35,6 +35,7 @@ public class RepeatBackground : MonoBehaviour
             {
                 // Instantiate the background prefab
                 GameObject backgroundObject = Instantiate(backgroundPrefab, new Vector3(i * backgroundWidth, j * backgroundHeight, 0), Quaternion.identity);
+                Debug.Log("test");
 
                 // Set the parent to keep the hierarchy clean
                 backgroundObject.transform.parent = transform;

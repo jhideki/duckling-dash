@@ -1,31 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class DuckAnimation : MonoBehaviour
+public class BirdAnimatin : MonoBehaviour
 {
     public List<Sprite> nSprites;
     public List<Sprite> eSprites;
     public List<Sprite> sSprites;
-
-    public List<Sprite> sIdleSprites;
-    public List<Sprite> eIdleSprites;
-    public List<Sprite> nIdleSprites;
     private List<Sprite> selectedSprites;
+    private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     public float frameRate;
     private float changeX;
     public float changeCutoff;
     private float changeY;
 
-    private int facing = 1;// 1 for east, 2 for north, 3 for south
-
     private Vector3 lastPosition;
     private Vector3 direction;
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         selectedSprites = eSprites;
     }
@@ -42,25 +38,15 @@ public class DuckAnimation : MonoBehaviour
             spriteRenderer.flipX = false;
         }
 
-        if (Mathf.Abs(changeX) > changeCutoff && Mathf.Abs(changeY) > changeCutoff)
+        if (direction.magnitude > 0.1f)
         {
             SetSprite();
         }
-        else
-        {
-            if (facing == 1)
-            {
-                selectedSprites = eIdleSprites;
-            }
-            else if (facing == 2)
-            {
-                selectedSprites = nIdleSprites;
-            }
-            else if (facing == 3)
-            {
-                selectedSprites = sIdleSprites;
-            }
-        }
+
+    }
+
+    void FixedUpdate()
+    {
 
         if (transform.position != lastPosition)
         {
@@ -71,32 +57,24 @@ public class DuckAnimation : MonoBehaviour
 
         lastPosition = transform.position;
 
-        int frame = (int)((Time.time * frameRate) % 3);
+        int frame = (int)(Time.time * frameRate % 4);
 
         spriteRenderer.sprite = selectedSprites[frame];
-    }
-
-    void FixedUpdate()
-    {
-
     }
     void SetSprite()
     {
         if (Mathf.Abs(changeY) > Mathf.Abs(changeX) && changeY > 0)
         {
             selectedSprites = nSprites;
-            facing = 2;
 
         }
         else if (Mathf.Abs(changeY) > Mathf.Abs(changeX) && changeY < 0)
         {
             selectedSprites = sSprites;
-            facing = 3;
         }
         else if (Mathf.Abs(changeY) < Mathf.Abs(changeX))
         {
             selectedSprites = eSprites;
-            facing = 1;
         }
     }
 }

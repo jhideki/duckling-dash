@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 916650396821471114}
   - component: {fileID: 394824054068950931}
-  - component: {fileID: 1969292795713724906}
   - component: {fileID: 7726680248552354749}
   - component: {fileID: 1109600515340941096}
   - component: {fileID: -2674644649438382447}
+  - component: {fileID: 4341708747509255089}
   m_Layer: 0
   m_Name: Duck
   m_TagString: Duck
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1016637724, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
+  m_Sprite: {fileID: -1322212864, guid: 6e0f4afe0274aca4984f39bbe028e7bc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -88,30 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1969292795713724906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3177720651346056840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d7d1d75141ad2849a00d20ffd865a20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nSprites:
-  - {fileID: -1950111338, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
-  neSprites:
-  - {fileID: -45839069, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
-  eSprites:
-  - {fileID: -1016637724, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
-  sSprites:
-  - {fileID: 1327957048, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
-  seSprites:
-  - {fileID: 1526068312, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
-  changeCutoff: 0.01
-  frameRate: 0.03
 --- !u!114 &7726680248552354749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,3 +168,41 @@ CircleCollider2D:
   m_Offset: {x: -0.07, y: -0.21}
   serializedVersion: 2
   m_Radius: 0.4236461
+--- !u!114 &4341708747509255089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3177720651346056840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d7d1d75141ad2849a00d20ffd865a20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nSprites:
+  - {fileID: -278102087, guid: ba47797604e2a514e8f6e85db4e561b0, type: 3}
+  - {fileID: 1273144803, guid: ba47797604e2a514e8f6e85db4e561b0, type: 3}
+  - {fileID: -1896748677, guid: ba47797604e2a514e8f6e85db4e561b0, type: 3}
+  eSprites:
+  - {fileID: 566965256, guid: 1253c4b6a50d4454da07b987fa365aa6, type: 3}
+  - {fileID: 507446766, guid: 1253c4b6a50d4454da07b987fa365aa6, type: 3}
+  - {fileID: -2086912080, guid: 1253c4b6a50d4454da07b987fa365aa6, type: 3}
+  sSprites:
+  - {fileID: -352793215, guid: 50069f8f584492547b77183cec82655c, type: 3}
+  - {fileID: 696021484, guid: 50069f8f584492547b77183cec82655c, type: 3}
+  - {fileID: -66874419, guid: 50069f8f584492547b77183cec82655c, type: 3}
+  sIdleSprites:
+  - {fileID: 1546757598, guid: 5473ce255eb1c124cac0e9c4f2546562, type: 3}
+  - {fileID: 56479222, guid: 5473ce255eb1c124cac0e9c4f2546562, type: 3}
+  - {fileID: 1490946170, guid: 5473ce255eb1c124cac0e9c4f2546562, type: 3}
+  eIdleSprites:
+  - {fileID: -1322212864, guid: 6e0f4afe0274aca4984f39bbe028e7bc, type: 3}
+  - {fileID: 889918465, guid: 6e0f4afe0274aca4984f39bbe028e7bc, type: 3}
+  - {fileID: -1061839028, guid: 6e0f4afe0274aca4984f39bbe028e7bc, type: 3}
+  nIdleSprites:
+  - {fileID: 1616172770, guid: 63f67f92e8feb9543812184dfbb8ed80, type: 3}
+  - {fileID: -1398541111, guid: 63f67f92e8feb9543812184dfbb8ed80, type: 3}
+  - {fileID: 1267182802, guid: 63f67f92e8feb9543812184dfbb8ed80, type: 3}
+  frameRate: 4
+  changeCutoff: 0.001
