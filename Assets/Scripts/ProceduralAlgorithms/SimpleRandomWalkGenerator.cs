@@ -4,33 +4,44 @@ using UnityEngine;
 using System.Linq;
 using Random = UnityEngine.Random;
 using Unity.VisualScripting;
+using UnityEngine.AI;
+using UnityEngine.Tilemaps;
 
 public class SimpleRandomWalkGenerator : AbstractGenerator
 {
     [SerializeField] private SimpleRAndomWalkSO randomwWalkParameters;
-    static public (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries;
+    [SerializeField] private GameObject hawkPrefab;
+    [SerializeField] private GameObject backgroundPrefab;
+    [SerializeField] private int mapPartitions;
+    static private (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries;
     public BoundaryData boundaryData;
-
+    private Boundaries mapBoundaries;
+    private Map map;
 
     protected override void RunProceduralGeneration()
     {
         HashSet<Vector2Int> floorPositions = RunRandomWalk();
-        boundaries = BoundryCalculator.GetCornerBoundaries(floorPositions);
+        mapBoundaries = BoundryCalculator.GetCornerBoundaries(floorPositions);
 
         // Load boundary data for runtime use
-        boundaryData.topLeft = boundaries.Item1;
-        boundaryData.topRight = boundaries.Item2;
-        boundaryData.bottomLeft = boundaries.Item3;
-        boundaryData.bottomRight = boundaries.Item4;
+        boundaryData.boundaries.topRight = mapBoundaries.topRight;
+        boundaryData.boundaries.topLeft = mapBoundaries.topLeft;
+        boundaryData.boundaries.bottomLeft = mapBoundaries.bottomLeft;
+        boundaryData.boundaries.bottomRight = mapBoundaries.bottomRight;
 
-        tileMapVisualizer.Clear();
-        //tileMapVisualizer.PaintFloorTiles(floorPositions);
-        WallGenerator.CreateWalls(floorPositions, tileMapVisualizer, boundaries);
-    }
+        //Draw walls and islands
+        (HashSet<Vector2Int>, HashSet<Vector2Int>) walls = WallGenerator.CreateWalls(floorPositions, tileMapVisualizer, mapBoundaries.GetBoundaries());
+        //Save wall, island and floor in map class
+        map = new Map(mapBoundaries, floorPositions, walls.Item1, walls.Item2, mapPartitions);
 
-    public static (Vector2Int, Vector2Int, Vector2Int, Vector2Int) GetCornerBoundaries()
-    {
-        return boundaries;
+        //Draw background
+        background.drawBackground(backgroundPrefab, mapBoundaries);
+
+        //get hawk positions
+        List<Vector2Int> hawkPositions = map.SetHawkPositions();
+
+        //Spawn hawks
+        spawner.SpawnObjects(hawkPositions, hawkPrefab);
     }
 
     protected HashSet<Vector2Int> RunRandomWalk()

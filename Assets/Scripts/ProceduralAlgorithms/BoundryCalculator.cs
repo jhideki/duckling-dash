@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class BoundryCalculator
 {
-    public static (Vector2Int, Vector2Int, Vector2Int, Vector2Int) GetCornerBoundaries(HashSet<Vector2Int> positions)
+    public static Boundaries GetCornerBoundaries(HashSet<Vector2Int> positions)
     {
         int maxX = int.MinValue;
         int maxY = int.MinValue;
@@ -29,7 +29,9 @@ public static class BoundryCalculator
         Vector2Int bottomLeft = minVector;
         Vector2Int bottomRight = new Vector2Int(maxX + BOUNDARY_OFFSET, minY - BOUNDARY_OFFSET);
 
-        return (topLeft, topRight, bottomLeft, bottomRight);
+        Boundaries boundaries = new Boundaries(topLeft, topRight, bottomLeft, bottomRight);
+
+        return boundaries;
     }
     public static HashSet<Vector2Int> GetGridLocationsNotInBoundaries(HashSet<Vector2Int> set1, HashSet<Vector2Int> set2, (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries)
     {
