@@ -11,11 +11,12 @@ GameObject:
   - component: {fileID: 3092866781945761445}
   - component: {fileID: 3031077564918499561}
   - component: {fileID: 3257912742844552133}
+  - component: {fileID: -419336311019732553}
   - component: {fileID: 5489558209707234743}
   - component: {fileID: 5275672655486512972}
   m_Layer: 0
   m_Name: Hawk
-  m_TagString: Untagged
+  m_TagString: Hawk
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,12 +77,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2747690628134850419, guid: b670ab75dde984907b8570040daa08c5, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: -2008026150, guid: 0f193882edabeb848889a79c10e46f56, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 0.8828125}
+  m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -102,9 +103,38 @@ MonoBehaviour:
   patrolSpeed: 1
   patrolRadius: 3
   visionRange: 3
-  attackRange: 0.5
+  attackRange: 1
   attackCooldown: 5
-  attackSpeed: 7
+  attackSpeed: 8
+--- !u!114 &-419336311019732553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3909654939896017668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375b1d3e7a7fb8b40ada88056e0bb907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nSprites:
+  - {fileID: 918173074, guid: eec15a86a8956ef44a11e56669054075, type: 3}
+  - {fileID: 3836318, guid: eec15a86a8956ef44a11e56669054075, type: 3}
+  - {fileID: 251868518, guid: eec15a86a8956ef44a11e56669054075, type: 3}
+  - {fileID: 1129053935, guid: 0f193882edabeb848889a79c10e46f56, type: 3}
+  eSprites:
+  - {fileID: 918173074, guid: eec15a86a8956ef44a11e56669054075, type: 3}
+  - {fileID: 3836318, guid: eec15a86a8956ef44a11e56669054075, type: 3}
+  - {fileID: 251868518, guid: eec15a86a8956ef44a11e56669054075, type: 3}
+  - {fileID: -1874260833, guid: eec15a86a8956ef44a11e56669054075, type: 3}
+  sSprites:
+  - {fileID: 1635479213, guid: e5608b13becbc4c478b537fe3e09100e, type: 3}
+  - {fileID: 1182625905, guid: e5608b13becbc4c478b537fe3e09100e, type: 3}
+  - {fileID: -932751211, guid: e5608b13becbc4c478b537fe3e09100e, type: 3}
+  - {fileID: -1081639279, guid: e5608b13becbc4c478b537fe3e09100e, type: 3}
+  frameRate: 5
+  changeCutoff: 0
 --- !u!50 &5489558209707234743
 Rigidbody2D:
   serializedVersion: 4

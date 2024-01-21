@@ -1,8 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
 public class TileMapVisualizer : MonoBehaviour
 {
     [SerializeField] private Tilemap floorTilemap, wallTilemap;
@@ -13,13 +13,27 @@ public class TileMapVisualizer : MonoBehaviour
         PaintTiles(floorPositions, floorTilemap, floorTile);
     }
 
+    public Vector3 GetCellCenterWorld(Vector3Int position)
+    {
+        return floorTilemap.GetCellCenterWorld(position);
+    }
+
+    public bool IsFloorTile(Vector3Int position)
+    {
+        return floorTilemap.GetTile(position) != null;
+    }
+
+    public BoundsInt GetTilemapBounds()
+    {
+        return floorTilemap.cellBounds;
+    }
+
     private void PaintTiles(IEnumerable<Vector2Int> positions, Tilemap tilemap, TileBase tile)
     {
         foreach (var position in positions)
         {
             PaintSingleTile(tilemap, tile, position);
         }
-
     }
 
     private void PaintSingleTile(Tilemap tilemap, TileBase tile, Vector2Int position)
@@ -38,5 +52,4 @@ public class TileMapVisualizer : MonoBehaviour
         floorTilemap.ClearAllTiles();
         wallTilemap.ClearAllTiles();
     }
-
 }
