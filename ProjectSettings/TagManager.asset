@@ -9,6 +9,7 @@ TagManager:
   - Walls
   - Floor
   - HawkSpawner
+  - Bush
   layers:
   - Default
   - TransparentFX

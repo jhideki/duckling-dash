@@ -101,8 +101,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb03cfe46c62a574ab1e704e2d5c3782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 1
-  patrolRadius: 3
+  patrolSpeed: 25
+  patrolRadius: 7
   visionRange: 3
   attackRange: 1
   attackCooldown: 5
