@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Map
@@ -11,20 +12,34 @@ public class Map
     public HashSet<Vector2Int> islandPositions;
     public HashSet<Vector2Int> wallPositions;
     public List<Vector2Int> hawkPositions;
+    public Spawner spawner;
+    public DrawBackground background;
+    private TileMapVisualizer tileMapVisualizer;
 
-    public Map(Boundaries boundaries)
+    public Map(TileMapVisualizer tileMapVisualizer, Spawner spawner, DrawBackground background)
     {
-        this.boundaries = boundaries;
+        this.tileMapVisualizer = tileMapVisualizer;
+        this.spawner = spawner;
+        this.background = background;
     }
 
-    //Constructor method
-    public Map(Boundaries boundaries, HashSet<Vector2Int> floorPositions, HashSet<Vector2Int> islandPositions, HashSet<Vector2Int> wallPositions, int divisions)
+    public void SetFloorPositions(HashSet<Vector2Int> floorPositions)
     {
-        this.boundaries = boundaries;
         this.floorPositions = floorPositions;
+        this.boundaries = BoundryCalculator.GetCornerBoundaries(floorPositions);
+    }
+
+    public void SetPartitions(int division)
+    {
+        this.partitions = PartitionMap(division);
+    }
+
+
+    //Constructor method
+    public void SetMap(HashSet<Vector2Int> islandPositions, HashSet<Vector2Int> wallPositions)
+    {
         this.islandPositions = islandPositions;
         this.wallPositions = wallPositions;
-        this.partitions = PartitionMap(divisions);
         this.hawkPositions = new List<Vector2Int>();
     }
 
@@ -68,6 +83,60 @@ public class Map
         return mapPartitions;
     }
 
+    public void ShiftMap(int xShift, int yShift)
+    {
+        HashSet<Vector2Int> temp = new HashSet<Vector2Int>();
+
+        //Shift boundareis
+        boundaries.topLeft = new Vector2Int(boundaries.topLeft.x + xShift, boundaries.topLeft.y + yShift);
+        boundaries.topRight = new Vector2Int(boundaries.topRight.x + xShift, boundaries.topRight.y + yShift);
+        boundaries.bottomRight = new Vector2Int(boundaries.bottomRight.x + xShift, boundaries.bottomRight.y + yShift);
+        boundaries.bottomLeft = new Vector2Int(boundaries.bottomLeft.x + xShift, boundaries.bottomLeft.y + yShift);
+
+        foreach (var floor in floorPositions)
+        {
+            Vector2Int shiftedPosition = new Vector2Int(floor.x + xShift, floor.y + yShift);
+            temp.Add(shiftedPosition);
+        }
+        floorPositions.Clear();
+        floorPositions.UnionWith(temp);
+        temp.Clear();
+
+        foreach (var wall in wallPositions)
+        {
+            Vector2Int shiftedPosition = new Vector2Int(wall.x + xShift, wall.y + yShift);
+            temp.Add(shiftedPosition);
+        }
+        wallPositions.Clear();
+        wallPositions.UnionWith(temp);
+        temp.Clear();
+
+        foreach (var island in islandPositions)
+        {
+            Vector2Int shiftedPosition = new Vector2Int(island.x + xShift, island.y + yShift);
+            temp.Add(shiftedPosition);
+        }
+        islandPositions.Clear();
+        islandPositions.UnionWith(temp);
+        temp.Clear();
+
+        /*
+
+        for (int i = 0; i < partitions.Count; i++)
+        {
+            foreach (var gridLocation in partitions[i])
+            {
+                Vector2Int shiftedPosition = new Vector2Int(gridLocation.x + xShift, gridLocation.y + yShift);
+                temp.Add(shiftedPosition);
+            }
+            partitions[i] = temp;
+            temp.Clear();
+        }
+        */
+
+
+    }
+
     //Sets random hawk position within each partition
     public List<Vector2Int> SetHawkPositions()
     {
@@ -85,6 +154,30 @@ public class Map
             }
         }
         return hawkPositions;
+    }
+
+    public void ClearMap()
+    {
+        spawner.ClearObjects();
+        background.clearBackground();
+        if (wallPositions != null && floorPositions != null)
+        {
+
+            foreach (var walls in wallPositions)
+            {
+                tileMapVisualizer.ClearWallTile(walls);
+            }
+
+            foreach (var floor in floorPositions)
+            {
+                tileMapVisualizer.ClearWallTile(floor);
+            }
+        }
+        else
+        {
+            tileMapVisualizer.Clear();
+        }
+
     }
 
 

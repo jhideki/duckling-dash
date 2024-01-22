@@ -19,7 +19,16 @@ public class MapGeneratorEditor : Editor
         base.OnInspectorGUI();
         if (GUILayout.Button("Generate Map"))
         {
+
             generator.Generate();
+
+        }
+
+        if (GUILayout.Button("Clear map"))
+        {
+            generator.ClearTiles();
+
+
         }
     }
 
