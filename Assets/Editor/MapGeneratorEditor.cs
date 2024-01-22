@@ -8,6 +8,7 @@ using UnityEngine;
 public class MapGeneratorEditor : Editor
 {
     AbstractGenerator generator;
+    Map map;
 
     private void Awake()
     {
@@ -20,7 +21,10 @@ public class MapGeneratorEditor : Editor
         if (GUILayout.Button("Generate Map"))
         {
 
-            generator.Generate();
+            map = generator.Generate();
+            Vector2Int position = new Vector2Int(0, 0);
+            generator.RunProceduralGeneration(map, position);
+            generator.DrawMapObjects(map);
 
         }
 

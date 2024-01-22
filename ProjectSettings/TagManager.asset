@@ -10,6 +10,7 @@ TagManager:
   - Floor
   - HawkSpawner
   - Bush
+  - FirePoint
   layers:
   - Default
   - TransparentFX
