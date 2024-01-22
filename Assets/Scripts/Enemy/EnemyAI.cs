@@ -12,6 +12,7 @@ public class EnemyAI : MonoBehaviour
 
     private bool isAttacking;
     private float lastAttackTime;
+    private bool playerVisible;
 
     private bool isPatrolling;
     private Vector2 originalPosition;
@@ -28,17 +29,35 @@ public class EnemyAI : MonoBehaviour
         originalPosition = transform.position;
         startingAngle = Random.Range(0f, 360f);
         isPatrolling = true;
+
+        Bush bush = FindObjectOfType<Bush>();
+        if (bush != null)
+        {
+            bush.OnHidingStateChanged += HandleHidingStateChanged;
+        }
     }
 
     void Update()
     {
-        if (isAttacking)
+        if (isAttacking && playerVisible)
         {
             Attack();
         }
         else if (isPatrolling)
         {
             PatrolCircle();
+        }
+    }
+
+    private void HandleHidingStateChanged(bool isHiding)
+    {
+        if (isHiding)
+        {
+            playerVisible = false;
+        }
+        else
+        {
+            playerVisible = true;
         }
     }
 
@@ -86,16 +105,8 @@ public class EnemyAI : MonoBehaviour
         Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, visionRange);
         foreach (Collider2D targetCollider in targets)
         {
-            if (targetCollider.CompareTag("Player") || targetCollider.CompareTag("Duck"))
+            if ((targetCollider.CompareTag("Player") || targetCollider.CompareTag("Duck")) && playerVisible)
             {
-                Bush bushComponent = targetCollider.GetComponent<Bush>();
-
-                // Check if the target is hiding in a bush or if the Bush component exists
-                if (bushComponent != null && bushComponent.IsHiding)
-                {
-                    // Player is hiding, continue patrolling without attacking
-                    return;
-                }
 
                 StartAttack(targetCollider.gameObject);
                 return;
@@ -117,6 +128,8 @@ public class EnemyAI : MonoBehaviour
         isPatrolling = false;
         isAttacking = true;
 
+
+
         // Set the target object
         targetObject = target;
     }
@@ -126,13 +139,13 @@ public class EnemyAI : MonoBehaviour
         // Move towards the target object with attack speed
         if (targetObject != null)
         {
-            // Check if the player is hiding in the bush
+            // Check if the player or duck is hiding in the bush
             Bush bushComponent = targetObject.GetComponent<Bush>();
 
             // Ensure that bushComponent is not null before accessing its properties
             if (bushComponent != null && bushComponent.IsHiding)
             {
-                // Player is hiding in the bush, continue patrolling
+                // Player or duck is hiding in the bush, continue patrolling
                 StopAttack();
             }
             else

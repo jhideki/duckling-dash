@@ -1,11 +1,15 @@
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class Bush : MonoBehaviour
 {
     public float playerOpacityInBush = 0.5f; // Opacity when player is in the bush
     public bool isHiding;
     private GameObject player;
+
+    // Event to notify when the hiding state changes
+    public event Action<bool> OnHidingStateChanged;
 
     public bool IsHiding
     {
@@ -19,6 +23,7 @@ public class Bush : MonoBehaviour
             isHiding = true;
             player = other.gameObject;
             StartCoroutine(AdjustPlayerOpacity(player, playerOpacityInBush));
+            NotifyHidingStateChanged(true);
         }
     }
 
@@ -29,7 +34,14 @@ public class Bush : MonoBehaviour
             isHiding = false;
             player = other.gameObject;
             StartCoroutine(AdjustPlayerOpacity(player, 1f)); // Reset opacity to 100%
+            NotifyHidingStateChanged(false);
         }
+    }
+
+    private void NotifyHidingStateChanged(bool newState)
+    {
+        // Notify subscribers about the hiding state change
+        OnHidingStateChanged?.Invoke(newState);
     }
 
     IEnumerator AdjustPlayerOpacity(GameObject player, float targetOpacity)
