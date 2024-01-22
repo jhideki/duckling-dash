@@ -47,6 +47,17 @@ public class TileMapVisualizer : MonoBehaviour
         PaintSingleTile(wallTilemap, wallTop, position);
     }
 
+    public void ClearWallTile(Vector2Int position)
+    {
+        var tilePosition = wallTilemap.WorldToCell((Vector3Int)position);
+        floorTilemap.SetTile(tilePosition, null);
+    }
+
+    public void ClearFloorTile(Vector2Int position)
+    {
+        var tilePosition = floorTilemap.WorldToCell((Vector3Int)position);
+        floorTilemap.SetTile(tilePosition, null);
+    }
     internal void PaintSingleDebug(Vector2Int position)
     {
         PaintSingleTile(wallTilemap, debugTile, position);

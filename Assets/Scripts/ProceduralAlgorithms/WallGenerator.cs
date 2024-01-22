@@ -6,11 +6,8 @@ using UnityEngine;
 
 public static class WallGenerator
 {
-    public static (HashSet<Vector2Int>, HashSet<Vector2Int>) CreateWalls(HashSet<Vector2Int> floorPositions, TileMapVisualizer tileMapVisualizer, (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries)
+    public static void CreateWalls(HashSet<Vector2Int> floorPositions, TileMapVisualizer tileMapVisualizer, HashSet<Vector2Int> islandWalls, HashSet<Vector2Int> outsideWalls)
     {
-        var outsideWalls = FindOutSideWalls(floorPositions, boundaries);
-        var islandWalls = BoundryCalculator.GetGridLocationsNotInBoundaries(floorPositions, outsideWalls, boundaries);
-
         foreach (var wall in outsideWalls)
         {
             tileMapVisualizer.PaintSingleBasicWall(wall);
@@ -20,9 +17,6 @@ public static class WallGenerator
         {
             tileMapVisualizer.PaintSingleBasicWall(wall);
         }
-
-        return (islandWalls, outsideWalls);
-
     }
 
     public static HashSet<Vector2Int> FindOutSideWalls(HashSet<Vector2Int> floorPositions, (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries)

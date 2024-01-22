@@ -4,13 +4,16 @@ using UnityEngine;
 
 public abstract class AbstractGenerator : MonoBehaviour
 {
-    [SerializeField] protected TileMapVisualizer tileMapVisualizer = null;
-    [SerializeField] protected Vector2Int startPosition = Vector2Int.zero;
+    [SerializeField] public TileMapVisualizer tileMapVisualizer = null;
+    [SerializeField] public SimpleRAndomWalkSO randomWalkParameters;
+    [SerializeField] public GameObject hawkPrefab;
+    [SerializeField] public GameObject backgroundPrefab;
+    [SerializeField] public int mapPartitions;
 
     protected Spawner spawner;
     protected DrawBackground background;
 
-    public void Generate()
+    public Map Generate()
     {
         // Check if spawner is not assigned
         if (spawner == null)
@@ -37,13 +40,19 @@ public abstract class AbstractGenerator : MonoBehaviour
             }
         }
 
-        //Clear existing map before drawing a new one
-        spawner.ClearObjects();
-        background.clearBackground();
-        tileMapVisualizer.Clear();
+        Map map = new Map(tileMapVisualizer, spawner, background);
 
-        RunProceduralGeneration();
+        return map;
     }
 
-    protected abstract void RunProceduralGeneration();
+
+    public void ClearTiles()
+    {
+        tileMapVisualizer.Clear();
+        spawner.ClearObjects();
+        background.clearBackground();
+    }
+
+    public abstract void RunProceduralGeneration(Map map, Vector2Int startPosition);
+    public abstract void DrawMapObjects(Map map);
 }

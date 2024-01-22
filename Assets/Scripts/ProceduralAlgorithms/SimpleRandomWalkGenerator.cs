@@ -9,51 +9,43 @@ using UnityEngine.Tilemaps;
 
 public class SimpleRandomWalkGenerator : AbstractGenerator
 {
-    [SerializeField] private SimpleRAndomWalkSO randomwWalkParameters;
-    [SerializeField] private GameObject hawkPrefab;
-    [SerializeField] private GameObject backgroundPrefab;
-    [SerializeField] private int mapPartitions;
-    static private (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries;
-    public BoundaryData boundaryData;
-    private Boundaries mapBoundaries;
-    public Map map;
-
-    protected override void RunProceduralGeneration()
+    public override void RunProceduralGeneration(Map map, Vector2Int startPosition)
     {
-        HashSet<Vector2Int> floorPositions = RunRandomWalk();
-        mapBoundaries = BoundryCalculator.GetCornerBoundaries(floorPositions);
+        HashSet<Vector2Int> floorPositions = RunRandomWalk(startPosition);
+        //Set map floor positions and boundries
+        map.SetFloorPositions(floorPositions);
+        HashSet<Vector2Int> walls = WallGenerator.FindOutSideWalls(floorPositions, map.boundaries.GetBoundaries());
+        HashSet<Vector2Int> islands = BoundryCalculator.GetGridLocationsNotInBoundaries(floorPositions, walls, map.boundaries.GetBoundaries());
+        map.SetMap(walls, islands);
+    }
 
-        // Load boundary data for runtime use
-        boundaryData.boundaries.topRight = mapBoundaries.topRight;
-        boundaryData.boundaries.topLeft = mapBoundaries.topLeft;
-        boundaryData.boundaries.bottomLeft = mapBoundaries.bottomLeft;
-        boundaryData.boundaries.bottomRight = mapBoundaries.bottomRight;
-
+    public override void DrawMapObjects(Map map)
+    {
+        //Partition map should occur after map is shifted
+        map.SetPartitions(mapPartitions);
         //Draw walls and islands
-        (HashSet<Vector2Int>, HashSet<Vector2Int>) walls = WallGenerator.CreateWalls(floorPositions, tileMapVisualizer, mapBoundaries.GetBoundaries());
-        //Save wall, island and floor in map class
-        map = new Map(mapBoundaries, floorPositions, walls.Item1, walls.Item2, mapPartitions);
+        WallGenerator.CreateWalls(map.floorPositions, tileMapVisualizer, map.wallPositions, map.islandPositions);
 
-        //Draw background
-        background.drawBackground(backgroundPrefab, mapBoundaries);
+        //draw background
+        map.background.drawBackground(backgroundPrefab, map.boundaries);
 
         //get hawk positions
         List<Vector2Int> hawkPositions = map.SetHawkPositions();
 
         //Spawn hawks
-        spawner.SpawnObjects(hawkPositions, hawkPrefab);
+        map.spawner.SpawnObjects(hawkPositions, hawkPrefab);
     }
 
-    protected HashSet<Vector2Int> RunRandomWalk()
+    protected HashSet<Vector2Int> RunRandomWalk(Vector2Int startPosition)
     {
         var currentPosition = startPosition;
         HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
-        for (int i = 0; i < randomwWalkParameters.iterations; i++)
+        for (int i = 0; i < randomWalkParameters.iterations; i++)
         {
-            var path = ProceduralGenerationAlgorithms.SimpleRandomWalk(currentPosition, randomwWalkParameters.walkLength);
+            var path = ProceduralGenerationAlgorithms.SimpleRandomWalk(currentPosition, randomWalkParameters.walkLength);
             floorPositions.UnionWith(path);
 
-            if (randomwWalkParameters.startRandomlyEachIteration)
+            if (randomWalkParameters.startRandomlyEachIteration)
             {
                 currentPosition = floorPositions.ElementAt(Random.Range(0, floorPositions.Count));
             }
