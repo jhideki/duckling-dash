@@ -10,17 +10,22 @@ public class Spawner : MonoBehaviour
     {
         mapObjects = new List<GameObject>();
     }
-    public void SpawnObjects(List<Vector2Int> spawnLocation, GameObject gameObj)
+
+    public void SpawnObjects(List<Vector2Int> spawnLocations, GameObject gameObj)
     {
-        string objName = gameObj.name;
-        GameObject parent = new GameObject(objName);
-        foreach (var location in spawnLocation)
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        foreach (var location in spawnLocations)
         {
             Vector3 spawnPosition = new Vector3(location.x, location.y, 0);
-            GameObject newObj = Instantiate(gameObj, spawnPosition, Quaternion.identity);
-            newObj.transform.SetParent(parent.transform);
+
+            // Check the distance between the player and the spawn position
+            if (Vector3.Distance(player.transform.position, spawnPosition) > 6f)
+            {
+                GameObject newObj = Instantiate(gameObj, spawnPosition, Quaternion.identity);
+                mapObjects.Add(newObj);
+            }
         }
-        mapObjects.Add(parent);
     }
 
     public void ClearObjects()
@@ -31,5 +36,4 @@ public class Spawner : MonoBehaviour
         }
         mapObjects.Clear();
     }
-
 }

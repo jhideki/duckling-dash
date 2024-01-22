@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    public float patrolSpeed = 1f;
-    public float patrolRadius = 5f;
+    public float patrolSpeed = 2f;
+    public float patrolRadius = 10f;
     public float visionRange = 3f;
     public float attackRange = 0.5f;
     public float attackCooldown = 3f;
@@ -17,6 +17,8 @@ public class EnemyAI : MonoBehaviour
     private Vector2 originalPosition;
     private GameObject targetObject;
 
+    private float startingAngle;
+
     private bool isOnCooldown;
     private Coroutine cooldownCoroutine;
 
@@ -24,6 +26,7 @@ public class EnemyAI : MonoBehaviour
     {
         // Initialize original position at the start
         originalPosition = transform.position;
+        startingAngle = Random.Range(0f, 360f);
         isPatrolling = true;
     }
 
@@ -80,24 +83,32 @@ public class EnemyAI : MonoBehaviour
 
     void PatrolCircle()
     {
-        // Check if the player or any object with the tag "Duck" is within vision range
         Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, visionRange);
         foreach (Collider2D targetCollider in targets)
         {
             if (targetCollider.CompareTag("Player") || targetCollider.CompareTag("Duck"))
             {
+                Bush bushComponent = targetCollider.GetComponent<Bush>();
+
+                // Check if the target is hiding in a bush or if the Bush component exists
+                if (bushComponent != null && bushComponent.IsHiding)
+                {
+                    // Player is hiding, continue patrolling without attacking
+                    return;
+                }
+
                 StartAttack(targetCollider.gameObject);
-                return; // Stop patrolling if at least one target is found
+                return;
             }
         }
 
         // Calculate circular movement around the original position if no target is found
-        float angle = Time.time * patrolSpeed;
-        float x = Mathf.Cos(angle) * patrolRadius;
-        float y = Mathf.Sin(angle) * patrolRadius;
+        float angle = (Time.time * patrolSpeed + startingAngle) % 360f;
+        float x = Mathf.Cos(Mathf.Deg2Rad * angle) * patrolRadius;
+        float y = Mathf.Sin(Mathf.Deg2Rad * angle) * patrolRadius;
 
-        Vector2 offset = new Vector2(x, y);
-        transform.position = Vector2.Lerp(transform.position, originalPosition + offset, patrolSpeed * Time.deltaTime);
+        // Set the new position without changing the rotation
+        transform.position = originalPosition + new Vector2(x, y);
     }
 
     void StartAttack(GameObject target)
@@ -115,14 +126,28 @@ public class EnemyAI : MonoBehaviour
         // Move towards the target object with attack speed
         if (targetObject != null)
         {
-            Vector2 direction = (targetObject.transform.position - transform.position).normalized;
-            transform.Translate(direction * attackSpeed * Time.deltaTime);
+            // Check if the player is hiding in the bush
+            Bush bushComponent = targetObject.GetComponent<Bush>();
 
-            // Check if the enemy is close to the target object to stop attacking
-            if (Vector2.Distance(transform.position, targetObject.transform.position) < attackRange)
+            // Ensure that bushComponent is not null before accessing its properties
+            if (bushComponent != null && bushComponent.IsHiding)
             {
-                Destroy(targetObject);
+                // Player is hiding in the bush, continue patrolling
                 StopAttack();
+            }
+            else
+            {
+                Vector2 direction = (targetObject.transform.position - transform.position).normalized;
+
+                // Move towards the target object with attack speed
+                transform.Translate(direction * attackSpeed * Time.deltaTime);
+
+                // Check if the enemy is close to the target object to stop attacking
+                if (Vector2.Distance(transform.position, targetObject.transform.position) < attackRange)
+                {
+                    Destroy(targetObject);
+                    StopAttack();
+                }
             }
         }
     }
