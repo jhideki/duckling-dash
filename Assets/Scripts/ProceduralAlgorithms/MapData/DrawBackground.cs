@@ -54,6 +54,7 @@ public class DrawBackground : MonoBehaviour
         {
             DestroyImmediate(parent);
         }
+        Destroy(this);
     }
 
 

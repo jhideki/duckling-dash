@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public static class ProceduralGenerationAlgorithms
 {
-
     public static HashSet<Vector2Int> SimpleRandomWalk(Vector2Int startPosition, int walkLength)
     {
         HashSet<Vector2Int> path = new HashSet<Vector2Int>();
@@ -22,6 +24,104 @@ public static class ProceduralGenerationAlgorithms
             previousPosition = newPosition;
         }
         return path;
+    }
+
+    public static HashSet<Vector2Int> Corridor(Map map, Vector2Int mapEdge, int direction)
+    {
+        HashSet<Vector2Int> path = new HashSet<Vector2Int>();
+        Vector2Int currentPosition = mapEdge;
+        int count = 0;
+        while (!map.floorPositions.Contains(currentPosition) && count < 1000)
+        {
+            path.Add(currentPosition);
+
+            Vector2Int thicken;
+            int num = Random.Range(1, 4);
+
+            if (direction == 1)
+            {
+                currentPosition.x -= 1;
+                thicken = new Vector2Int(currentPosition.x, currentPosition.y + 1);
+                path.Add(thicken);
+                thicken = new Vector2Int(currentPosition.x, currentPosition.y - 1);
+                path.Add(thicken);
+                if (num == 1)
+                {
+                    thicken = new Vector2Int(currentPosition.x, currentPosition.y + 2);
+                    path.Add(thicken);
+                }
+                else if (num == 2)
+                {
+                    thicken = new Vector2Int(currentPosition.x, currentPosition.y - 2);
+                    path.Add(thicken);
+                }
+
+            }
+            else if (direction == 2)
+            {
+
+                currentPosition.x += 1;
+                thicken = new Vector2Int(currentPosition.x, currentPosition.y + 1);
+                path.Add(thicken);
+                thicken = new Vector2Int(currentPosition.x, currentPosition.y - 1);
+                path.Add(thicken);
+                if (num == 1)
+                {
+                    thicken = new Vector2Int(currentPosition.x, currentPosition.y + 2);
+                    path.Add(thicken);
+                }
+                else if (num == 2)
+                {
+                    thicken = new Vector2Int(currentPosition.x, currentPosition.y - 2);
+                    path.Add(thicken);
+                }
+            }
+            else if (direction == 3)
+            {
+                currentPosition.y -= 1;
+                thicken = new Vector2Int(currentPosition.x + 1, currentPosition.y);
+                path.Add(thicken);
+                thicken = new Vector2Int(currentPosition.x - 1, currentPosition.y);
+                path.Add(thicken);
+                if (num == 1)
+                {
+                    thicken = new Vector2Int(currentPosition.x + 2, currentPosition.y);
+
+                    path.Add(thicken);
+                }
+                else if (num == 2)
+                {
+                    thicken = new Vector2Int(currentPosition.x - 2, currentPosition.y);
+                    path.Add(thicken);
+                }
+            }
+            else
+            {
+                currentPosition.y += 1;
+                thicken = new Vector2Int(currentPosition.x + 1, currentPosition.y);
+                path.Add(thicken);
+                thicken = new Vector2Int(currentPosition.x - 1, currentPosition.y);
+                path.Add(thicken);
+                if (num == 1)
+                {
+                    thicken = new Vector2Int(currentPosition.x + 2, currentPosition.y);
+                    path.Add(thicken);
+                }
+                else if (num == 2)
+                {
+                    thicken = new Vector2Int(currentPosition.x + 2, currentPosition.y);
+                    path.Add(thicken);
+                }
+            }
+
+            count++;
+        }
+        map.SetCorridorLenth(count);
+
+
+
+        return path;
+
     }
 
 }

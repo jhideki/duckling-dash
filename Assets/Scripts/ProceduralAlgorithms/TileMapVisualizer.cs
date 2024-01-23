@@ -50,7 +50,15 @@ public class TileMapVisualizer : MonoBehaviour
     public void ClearWallTile(Vector2Int position)
     {
         var tilePosition = wallTilemap.WorldToCell((Vector3Int)position);
-        floorTilemap.SetTile(tilePosition, null);
+        wallTilemap.SetTile(tilePosition, null);
+    }
+
+    public void ClearWallTiles(HashSet<Vector2Int> positions)
+    {
+        foreach (var position in positions)
+        {
+            ClearWallTile(position);
+        }
     }
 
     public void ClearFloorTile(Vector2Int position)

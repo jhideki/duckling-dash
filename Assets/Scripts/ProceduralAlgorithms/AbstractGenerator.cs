@@ -9,38 +9,22 @@ public abstract class AbstractGenerator : MonoBehaviour
     [SerializeField] public GameObject hawkPrefab;
     [SerializeField] public GameObject backgroundPrefab;
     [SerializeField] public int mapPartitions;
+    public WallGenerator wallGenerator;
 
-    protected Spawner spawner;
     protected DrawBackground background;
 
     public Map Generate()
     {
-        // Check if spawner is not assigned
-        if (spawner == null)
+        if (gameObject.GetComponent<WallGenerator>() == null)
         {
-            // Try to find the Spawner component on the current GameObject
-            spawner = GetComponent<Spawner>();
-
-            // If it's still null, add the Spawner component dynamically
-            if (spawner == null)
-            {
-                spawner = gameObject.AddComponent<Spawner>();
-            }
+            wallGenerator = gameObject.AddComponent<WallGenerator>();
         }
+        Spawner spawner = gameObject.AddComponent<Spawner>();
 
-        if (background == null)
-        {
-            // Try to find the Spawner component on the current GameObject
-            background = GetComponent<DrawBackground>();
-
-            // If it's still null, add the Spawner component dynamically
-            if (background == null)
-            {
-                background = gameObject.AddComponent<DrawBackground>();
-            }
-        }
+        DrawBackground background = gameObject.AddComponent<DrawBackground>();
 
         Map map = new Map(tileMapVisualizer, spawner, background);
+
 
         return map;
     }
@@ -49,10 +33,11 @@ public abstract class AbstractGenerator : MonoBehaviour
     public void ClearTiles()
     {
         tileMapVisualizer.Clear();
-        spawner.ClearObjects();
         background.clearBackground();
     }
 
     public abstract void RunProceduralGeneration(Map map, Vector2Int startPosition);
     public abstract void DrawMapObjects(Map map);
+    public abstract void DrawCorridor(Map map, Map map2);
+    public abstract void CreateCorridor(Map map, int mapEdge, Map map2);
 }

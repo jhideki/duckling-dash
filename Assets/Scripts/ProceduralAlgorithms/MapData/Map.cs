@@ -11,10 +11,12 @@ public class Map
     public HashSet<Vector2Int> floorPositions;
     public HashSet<Vector2Int> islandPositions;
     public HashSet<Vector2Int> wallPositions;
+    public HashSet<Vector2Int> corridorPositions;
     public List<Vector2Int> hawkPositions;
     public Spawner spawner;
     public DrawBackground background;
-    private TileMapVisualizer tileMapVisualizer;
+    public TileMapVisualizer tileMapVisualizer;
+    public int corridorLength;
 
     public Map(TileMapVisualizer tileMapVisualizer, Spawner spawner, DrawBackground background)
     {
@@ -32,6 +34,27 @@ public class Map
     public void SetPartitions(int division)
     {
         this.partitions = PartitionMap(division);
+    }
+
+    public void SetCorridor(HashSet<Vector2Int> corridorPositions)
+    {
+        this.corridorPositions = corridorPositions;
+        foreach (var position in corridorPositions)
+        {
+            if (wallPositions.Contains(position))
+            {
+                wallPositions.Remove(position);
+            }
+            if (islandPositions.Contains(position))
+            {
+                islandPositions.Remove(position);
+            }
+        }
+    }
+
+    public void SetCorridorLenth(int corridorLength)
+    {
+        this.corridorLength = corridorLength;
     }
 
 
@@ -120,21 +143,6 @@ public class Map
         islandPositions.UnionWith(temp);
         temp.Clear();
 
-        /*
-
-        for (int i = 0; i < partitions.Count; i++)
-        {
-            foreach (var gridLocation in partitions[i])
-            {
-                Vector2Int shiftedPosition = new Vector2Int(gridLocation.x + xShift, gridLocation.y + yShift);
-                temp.Add(shiftedPosition);
-            }
-            partitions[i] = temp;
-            temp.Clear();
-        }
-        */
-
-
     }
 
     //Sets random hawk position within each partition
@@ -170,8 +178,20 @@ public class Map
 
             foreach (var floor in floorPositions)
             {
-                tileMapVisualizer.ClearWallTile(floor);
+                tileMapVisualizer.ClearFloorTile(floor);
             }
+
+            foreach (var position in islandPositions)
+            {
+                tileMapVisualizer.ClearFloorTile(position);
+            }
+
+            foreach (var position in corridorPositions)
+            {
+                tileMapVisualizer.ClearFloorTile(position);
+            }
+
+
         }
         else
         {
@@ -180,5 +200,13 @@ public class Map
 
     }
 
+    public void PaintCorridor()
+    {
+        foreach (var position in corridorPositions)
+        {
+            tileMapVisualizer.PaintSingleBasicWall(position);
+        }
+
+    }
 
 }
