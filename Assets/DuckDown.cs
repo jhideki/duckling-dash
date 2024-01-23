@@ -36,13 +36,21 @@ public class DuckDown : MonoBehaviour
     {
         // Start at the end of the chain
         FollowParent currentDuck = hitDuck;
+
         while (currentDuck != null)
         {
+            Debug.Log("DUCK FOUND");
+
             // Stop the current duck from following
             currentDuck.StopFollowing();
 
             // Move to the previous duck
-            currentDuck = currentDuck.GetNextDuck();
+            FollowParent Nextduck = currentDuck.GetNextDuck();
+            if (Nextduck != null)
+            {
+                currentDuck = Nextduck;
+                Nextduck = currentDuck.GetNextDuck();
+            }
         }
     }
 }
