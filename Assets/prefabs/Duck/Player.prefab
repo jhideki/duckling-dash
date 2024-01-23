@@ -77,9 +77,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1779516135
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 5b80ee00cef7286499d711c0ed95aba5, type: 3}
+  m_Sprite: {fileID: -677297836, guid: f4008750c9ebaee4aadc606e932e1e05, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,18 +103,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nSprites:
-  - {fileID: -1950111338, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
+  - {fileID: -1229184657, guid: f878ab60a68eb9443a3c7a61d1cc2de1, type: 3}
+  - {fileID: -198565522, guid: f878ab60a68eb9443a3c7a61d1cc2de1, type: 3}
+  - {fileID: 1190350294, guid: f878ab60a68eb9443a3c7a61d1cc2de1, type: 3}
   eSprites:
-  - {fileID: -1016637724, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
+  - {fileID: 693449921, guid: 0eed2e869ec5baf408449fb060022d3e, type: 3}
+  - {fileID: 2019303680, guid: 0eed2e869ec5baf408449fb060022d3e, type: 3}
+  - {fileID: 1451842436, guid: 0eed2e869ec5baf408449fb060022d3e, type: 3}
   sSprites:
-  - {fileID: 1327957048, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
+  - {fileID: -706289453, guid: f7b00af42649819418b87c70912eeb42, type: 3}
+  - {fileID: -160886761, guid: f7b00af42649819418b87c70912eeb42, type: 3}
+  - {fileID: -1977549569, guid: f7b00af42649819418b87c70912eeb42, type: 3}
   sIdleSprites:
-  - {fileID: -1016637724, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
+  - {fileID: 332748767, guid: 35e896ea9d182324f8756b5d0a807895, type: 3}
+  - {fileID: -1732720598, guid: 35e896ea9d182324f8756b5d0a807895, type: 3}
+  - {fileID: 125054690, guid: 35e896ea9d182324f8756b5d0a807895, type: 3}
   eIdleSprites:
-  - {fileID: -1016637724, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
+  - {fileID: -677297836, guid: f4008750c9ebaee4aadc606e932e1e05, type: 3}
+  - {fileID: 365783520, guid: f4008750c9ebaee4aadc606e932e1e05, type: 3}
+  - {fileID: -1664459543, guid: f4008750c9ebaee4aadc606e932e1e05, type: 3}
   nIdleSprites:
-  - {fileID: -1950111338, guid: 61591f500f28e28489afa7f04b32a429, type: 3}
-  frameRate: 5
+  - {fileID: 1670567614, guid: c59f7b097dafb6c459d31cbb15bdf26d, type: 3}
+  - {fileID: -1074393263, guid: c59f7b097dafb6c459d31cbb15bdf26d, type: 3}
+  - {fileID: -1435931306, guid: c59f7b097dafb6c459d31cbb15bdf26d, type: 3}
+  frameRate: 4
 --- !u!114 &2782548122329473124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   isMoving: 0
+  isHiding: 0
 --- !u!114 &3106893629132857134
 MonoBehaviour:
   m_ObjectHideFlags: 0
