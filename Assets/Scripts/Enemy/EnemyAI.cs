@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -15,79 +16,38 @@ public class EnemyAI : MonoBehaviour
 
     private bool isAttacking;
     private bool isPatrolling = true;
-
-    private Bush bush;
-
     private Vector2 originalPosition;
     private GameObject targetObject;
     private float startingAngle;
 
     private bool isOnCooldown;
     private Coroutine cooldownCoroutine;
+    private Hiding hiding;
+    private bool isHiding;
 
     void Start()
     {
         // Initialize original position at the start
         originalPosition = transform.position;
         startingAngle = UnityEngine.Random.Range(0f, 360f);
-
+        isHiding = false;
         // Find the Bush script in the scene
-        bush = FindObjectOfType<Bush>();
     }
 
     void Update()
     {
-        if (bush.isHiding && isPatrolling && isAttacking)
+        if (isHiding && isPatrolling && isAttacking)
         {
             // Player is hiding in a bush, resume patrolling
             isAttacking = false;
         }
-        if (isAttacking && !bush.isHiding)
+        if (isAttacking && !isHiding)
         {
             Attack();
         }
-        else if (isPatrolling || bush.isHiding)
+        else if (isPatrolling || isHiding)
         {
             PatrolCircle();
-        }
-    }
-
-    void OnDrawGizmos()
-    {
-        // Visualize vision range and attack range as wire spheres in the Scene view and during runtime
-        Gizmos.color = new Color(1f, 0f, 0f, 0.2f); // Red with transparency
-
-        // Vision range
-        Gizmos.DrawWireSphere(transform.position, visionRange);
-
-        // Attack range
-        Gizmos.color = new Color(1f, 0.5f, 0f, 0.2f); // Orange with transparency
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-
-        // Draw a hard red circle around the enemy during runtime
-        DrawHardRedCircle();
-    }
-
-    void DrawHardRedCircle()
-    {
-        Gizmos.color = Color.red;
-
-        int segments = 360;
-        float angleIncrement = 360f / segments;
-
-        for (int i = 0; i < segments; i++)
-        {
-            float angle = i * angleIncrement;
-            float x = Mathf.Cos(Mathf.Deg2Rad * angle) * visionRange;
-            float y = Mathf.Sin(Mathf.Deg2Rad * angle) * visionRange;
-
-            Vector3 start = transform.position + new Vector3(x, y, 0f);
-            angle += angleIncrement;
-            x = Mathf.Cos(Mathf.Deg2Rad * angle) * visionRange;
-            y = Mathf.Sin(Mathf.Deg2Rad * angle) * visionRange;
-            Vector3 end = transform.position + new Vector3(x, y, 0f);
-
-            Gizmos.DrawLine(start, end);
         }
     }
 
@@ -96,9 +56,15 @@ public class EnemyAI : MonoBehaviour
         Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, visionRange);
         foreach (Collider2D targetCollider in targets)
         {
-            if ((targetCollider.CompareTag("Player") || targetCollider.CompareTag("Duck")) && !bush.isHiding)
+            if (targetCollider.CompareTag("Player") || targetCollider.CompareTag("Duck"))
             {
-                StartAttack(targetCollider.gameObject);
+                targetObject = targetCollider.gameObject;
+                hiding = targetObject.GetComponent<Hiding>();
+                isHiding = hiding.GetHiding();
+                if (!isHiding)
+                {
+                    isAttacking = true;
+                }
                 return;
             }
         }
@@ -112,20 +78,13 @@ public class EnemyAI : MonoBehaviour
         transform.position = originalPosition + new Vector2(x, y);
     }
 
-    void StartAttack(GameObject target)
-    {   
-        // Set the target object
-        targetObject = target;
-
-        isAttacking = true;
-    }
 
     void Attack()
     {
         // Move towards the target object with attack speed
         if (targetObject != null)
         {
-            if (bush.isHiding)
+            if (isHiding)
             {
                 // Player or duck is hiding in the bush, continue patrolling
                 StopAttack();

@@ -250,7 +250,12 @@ MonoBehaviour:
   randomWalkParameters: {fileID: 11400000, guid: 7fe8a5eec06adea4fa4f2fc4bcee4cff, type: 2}
   hawkPrefab: {fileID: 3909654939896017668, guid: e16d0f4cb156aaa4db350c556e16a6b2, type: 3}
   backgroundPrefab: {fileID: 2119462211771735906, guid: 528f6a511bf1bcc42a7ec97201b9ddc2, type: 3}
-  mapPartitions: 3
+  bushPrefab: {fileID: 5594614065306607260, guid: ed2f80eb86c1dae438dc0f090959fe31, type: 3}
+  duckPrefab: {fileID: 3177720651346056840, guid: 4f813546c8fdce54a9e9db73a14b4f69, type: 3}
+  mapPartitions: 2
+  minBushes: 8
+  maxBushes: 15
+  numDucklings: 10
   wallGenerator: {fileID: 0}
 --- !u!114 &1280203465624272465
 MonoBehaviour:
