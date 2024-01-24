@@ -39,9 +39,9 @@ public class PickupDuck : MonoBehaviour
             followScript.SetPreviousDuck(lastDuck);
 
              // Add debug statements to check the linked list
-            Debug.Log("Current Duck: " + duck.name);
-            Debug.Log("Previous Duck: " + (lastDuck != null ? lastDuck.name : "null"));
-            Debug.Log("Next Duck: " + (followScript.GetNextDuck() != null ? followScript.GetNextDuck().name : "null"));
+            //Debug.Log("Current Duck: " + duck.name);
+            //Debug.Log("Previous Duck: " + (lastDuck != null ? lastDuck.name : "null"));
+           // Debug.Log("Next Duck: " + (followScript.GetNextDuck() != null ? followScript.GetNextDuck().name : "null"));
 
             lastDuck = followScript;
         }

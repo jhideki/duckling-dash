@@ -46,7 +46,7 @@ public class DuckDown : MonoBehaviour
 
         while (currentDuck != null)
         {
-            Debug.Log("Current Duck: " + currentDuck.name);
+            //Debug.Log("Current Duck: " + currentDuck.name);
 
             // Stop the current duck from following
             currentDuck.StopFollowing();
@@ -56,7 +56,7 @@ public class DuckDown : MonoBehaviour
 
             if (currentDuck != null)
             {
-                Debug.Log("Next Duck: " + currentDuck.name);
+               // Debug.Log("Next Duck: " + currentDuck.name);
             }
         }
     }
