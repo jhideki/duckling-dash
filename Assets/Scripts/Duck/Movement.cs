@@ -5,6 +5,7 @@ public class Movement : MonoBehaviour
     public float moveSpeed = 5f; // Adjust this to set the default movement speed
     public bool isMoving;
     public bool isHiding;
+    public bool canMove;
 
     private Rigidbody2D rb;
     private float horizontalInput;
@@ -12,8 +13,9 @@ public class Movement : MonoBehaviour
 
     void Start()
     {
+        canMove = true;
         rb = GetComponent<Rigidbody2D>();
-        
+
         Bush bush = FindObjectOfType<Bush>();
         if (bush != null)
         {
@@ -42,7 +44,14 @@ public class Movement : MonoBehaviour
         float currentMoveSpeed = isHiding ? moveSpeed * 0.5f : moveSpeed;
 
         // Move the player
-        rb.velocity = movement * currentMoveSpeed;
+        if (canMove)
+        {
+            rb.velocity = movement * currentMoveSpeed;
+        }
+        else
+        {
+            rb.velocity = Vector2.zero;
+        }
     }
 
     private void HandleHidingStateChanged(bool isHiding)

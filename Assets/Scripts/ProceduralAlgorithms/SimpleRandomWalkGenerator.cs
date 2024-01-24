@@ -20,30 +20,6 @@ public class SimpleRandomWalkGenerator : AbstractGenerator
         map.SetMap(islands, walls);
     }
 
-    public override void DrawMapObjects(Map map)
-    {
-        //Partition map should occur after map is shifted
-        map.SetPartitions(mapPartitions);
-
-        //Draw walls and islands
-        wallGenerator.CreateWalls(map.floorPositions, map.tileMapVisualizer, map.wallPositions, map.islandPositions);
-
-        //draw background
-        map.background.drawBackground(backgroundPrefab, map.boundaries);
-
-        //get hawk positions
-        List<Vector2Int> hawkPositions = map.SetHawkPositions();
-
-        //Spawn hawks
-        map.spawner.SpawnObjects(hawkPositions, hawkPrefab);
-    }
-
-    public override void DrawCorridor(Map map, Map map2)
-    {
-        tileMapVisualizer.ClearWallTiles(map.corridorPositions);
-        tileMapVisualizer.ClearWallTiles(map2.corridorPositions);
-    }
-
     protected HashSet<Vector2Int> RunRandomWalk(Vector2Int startPosition)
     {
         var currentPosition = startPosition;

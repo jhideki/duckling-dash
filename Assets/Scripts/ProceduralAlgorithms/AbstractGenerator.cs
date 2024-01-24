@@ -29,6 +29,59 @@ public abstract class AbstractGenerator : MonoBehaviour
         return map;
     }
 
+    public IEnumerator DrawMapObjects(Map map)
+    {
+        //Partition map should occur after map is shifted
+        map.SetPartitions(mapPartitions);
+
+        //draw background
+        map.background.drawBackground(backgroundPrefab, map.boundaries);
+        //Draw walls and islands
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.wallPositions));
+
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.islandPositions));
+
+        tileMapVisualizer.ClearWallTiles(map.corridorPositions);
+
+        //get hawk positions
+        List<Vector2Int> hawkPositions = map.SetHawkPositions();
+
+        //Spawn hawks
+        map.spawner.SpawnObjects(hawkPositions, hawkPrefab);
+    }
+
+    public IEnumerator DrawMapObjects(Map map, Map map2)
+    {
+        //Partition map should occur after map is shifted
+        map.SetPartitions(mapPartitions);
+
+        //Draw walls and islands
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.wallPositions));
+
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.islandPositions));
+
+        tileMapVisualizer.ClearWallTiles(map.corridorPositions);
+
+        tileMapVisualizer.ClearWallTiles(map2.corridorPositions);
+        //draw background
+        map.background.drawBackground(backgroundPrefab, map.boundaries);
+
+        //get hawk positions
+        List<Vector2Int> hawkPositions = map.SetHawkPositions();
+
+        //Spawn hawks
+        map.spawner.SpawnObjects(hawkPositions, hawkPrefab);
+    }
+
+    public IEnumerator FillCorridor(Map map)
+    {
+        //paint corridor
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.corridorPositions));
+
+        //update map data
+        //map.PaintCorridor();
+    }
+
 
     public void ClearTiles()
     {
@@ -37,7 +90,5 @@ public abstract class AbstractGenerator : MonoBehaviour
     }
 
     public abstract void RunProceduralGeneration(Map map, Vector2Int startPosition);
-    public abstract void DrawMapObjects(Map map);
-    public abstract void DrawCorridor(Map map, Map map2);
     public abstract void CreateCorridor(Map map, int mapEdge, Map map2);
 }

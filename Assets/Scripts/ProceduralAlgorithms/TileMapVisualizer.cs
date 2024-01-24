@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -33,6 +34,21 @@ public class TileMapVisualizer : MonoBehaviour
         foreach (var position in positions)
         {
             PaintSingleTile(tilemap, tile, position);
+        }
+    }
+
+    //async method for painting walls over a period of frames (10 wall per frame)
+    public IEnumerator PaintTilesAsync(HashSet<Vector2Int> positions)
+    {
+        int numElements = 0;
+        foreach (var position in new HashSet<Vector2Int>(positions))
+        {
+            PaintSingleTile(wallTilemap, wallTop, position);
+            numElements++;
+            if (numElements % 2 == 0)
+            {
+                yield return null;
+            }
         }
     }
 

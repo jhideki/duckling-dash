@@ -168,9 +168,9 @@ public class Map
     {
         spawner.ClearObjects();
         background.clearBackground();
+        //clear wall position refers to any grass block
         if (wallPositions != null && floorPositions != null)
         {
-
             foreach (var walls in wallPositions)
             {
                 tileMapVisualizer.ClearWallTile(walls);
@@ -178,17 +178,17 @@ public class Map
 
             foreach (var floor in floorPositions)
             {
-                tileMapVisualizer.ClearFloorTile(floor);
+                tileMapVisualizer.ClearWallTile(floor);
             }
 
             foreach (var position in islandPositions)
             {
-                tileMapVisualizer.ClearFloorTile(position);
+                tileMapVisualizer.ClearWallTile(position);
             }
 
             foreach (var position in corridorPositions)
             {
-                tileMapVisualizer.ClearFloorTile(position);
+                tileMapVisualizer.ClearWallTile(position);
             }
 
 
@@ -202,9 +202,10 @@ public class Map
 
     public void PaintCorridor()
     {
-        foreach (var position in corridorPositions)
+        foreach (var position in new HashSet<Vector2Int>(corridorPositions))
         {
-            tileMapVisualizer.PaintSingleBasicWall(position);
+            corridorPositions.Remove(position);
+            wallPositions.Add(position);
         }
 
     }

@@ -15,8 +15,6 @@ public class MapController : MonoBehaviour
     private Vector3 positionCrossed;
     private bool inMap2;
     private int mapSide;
-    private bool isLoadingMap = false;
-
 
     // Start is called before the first frame update
     void Start()
@@ -28,8 +26,6 @@ public class MapController : MonoBehaviour
         map1 = abstractGenerator.Generate();
         // Load map data
         abstractGenerator.RunProceduralGeneration(map1, firstPosition);
-        // Draw map
-        abstractGenerator.DrawMapObjects(map1);
 
         // Create second map object
         mapSide = UnityEngine.Random.Range(1, 5);
@@ -75,40 +71,42 @@ public class MapController : MonoBehaviour
                 break;
         }
         map2.ShiftMap(shiftAmountX, shiftAmountY);
-        abstractGenerator.DrawMapObjects(map2);
+
         abstractGenerator.CreateCorridor(map1, mapSide, map2);
-        abstractGenerator.DrawCorridor(map1, map2);
+        // Draw map
+        StartCoroutine(abstractGenerator.DrawMapObjects(map1));
+        StartCoroutine(abstractGenerator.DrawMapObjects(map2));
         SetBoxColliderPerimeter(map2.boundaries);
     }
 
     void Update()
     {
-        if (inMap2 && !isLoadingMap)
+        if (inMap2)
         {
             switch (mapSide)
             {
                 case 1:
                     if (player.transform.position.x > positionCrossed.x + cutoff + map2.corridorLength)
                     {
-                        StartCoroutine(LoadMapWrapper());
+                        GenerateNewMap();
                     }
                     break;
                 case 2:
                     if (player.transform.position.x < positionCrossed.x - cutoff - map2.corridorLength)
                     {
-                        StartCoroutine(LoadMapWrapper());
+                        GenerateNewMap();
                     }
                     break;
                 case 3:
                     if (player.transform.position.y > positionCrossed.y + cutoff + map2.corridorLength)
                     {
-                        StartCoroutine(LoadMapWrapper());
+                        GenerateNewMap();
                     }
                     break;
                 default:
                     if (player.transform.position.y < positionCrossed.y - cutoff - map2.corridorLength)
                     {
-                        StartCoroutine(LoadMapWrapper());
+                        GenerateNewMap();
                     }
                     break;
             }
@@ -117,7 +115,7 @@ public class MapController : MonoBehaviour
     public void GenerateNewMap()
     {
         map1.ClearMap();
-        map2.PaintCorridor();
+        StartCoroutine(abstractGenerator.FillCorridor(map2));
         map1 = map2;
 
         switch (mapSide)
@@ -196,18 +194,9 @@ public class MapController : MonoBehaviour
         }
 
         map2.ShiftMap(shiftAmountX, shiftAmountY);
-        abstractGenerator.DrawMapObjects(map2);
         abstractGenerator.CreateCorridor(map1, mapSide, map2);
-        abstractGenerator.DrawCorridor(map1, map2);
+        StartCoroutine(abstractGenerator.DrawMapObjects(map2, map1));
         SetBoxColliderPerimeter(map2.boundaries);
-    }
-    IEnumerator LoadMapWrapper()
-    {
-        isLoadingMap = true;
-        GenerateNewMap();
-
-        yield return null;
-        isLoadingMap = false;
     }
     private void SetBoxColliderPerimeter(Boundaries boundaries)
     {
