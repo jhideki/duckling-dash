@@ -30,6 +30,13 @@ public class DuckDown : MonoBehaviour
 
         // Destroy the bullet
         Destroy(bullet);
+
+        // Call the UpdateLastDuck function in the PickupDuck script
+        PickupDuck pickupDuckScript = FindObjectOfType<PickupDuck>();
+        if (pickupDuckScript != null)
+        {
+            pickupDuckScript.ChangeLast();
+        }
     }
 
     void DetachFollowers(FollowParent hitDuck)
@@ -39,17 +46,17 @@ public class DuckDown : MonoBehaviour
 
         while (currentDuck != null)
         {
-            Debug.Log("DUCK FOUND");
+            Debug.Log("Current Duck: " + currentDuck.name);
 
             // Stop the current duck from following
             currentDuck.StopFollowing();
 
             // Move to the previous duck
-            FollowParent Nextduck = currentDuck.GetNextDuck();
-            if (Nextduck != null)
+            currentDuck = currentDuck.GetNextDuck();
+
+            if (currentDuck != null)
             {
-                currentDuck = Nextduck;
-                Nextduck = currentDuck.GetNextDuck();
+                Debug.Log("Next Duck: " + currentDuck.name);
             }
         }
     }

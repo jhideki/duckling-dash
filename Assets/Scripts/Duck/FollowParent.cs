@@ -88,14 +88,21 @@ public class FollowParent : MonoBehaviour
         Debug.Log("GAYYYYYYYYYYYYYYYYYYYYYYYYY");
         isFollowing = false;
         target = null;
+
+        // Disconnect from the previous duck
+        if (previousDuck != null)
+        {
+            previousDuck.SetNextDuck(null);
+        }
+
         previousDuck = null;
-        nextDuck = null;
+        
 
     }
 
     public void SetPreviousDuck(FollowParent duck)
     {
-        previousDuck = duck;
+       previousDuck = duck;
     }
 
     public FollowParent GetPreviousDuck()
@@ -105,7 +112,7 @@ public class FollowParent : MonoBehaviour
 
     public void SetNextDuck(FollowParent duck)
     {
-        nextDuck = duck;
+            nextDuck = duck;
     }
 
     public FollowParent GetNextDuck()
