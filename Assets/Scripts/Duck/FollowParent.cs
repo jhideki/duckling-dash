@@ -119,4 +119,9 @@ public class FollowParent : MonoBehaviour
     {
         return nextDuck;
     }
+
+    public bool IsFollowingPlayer()
+    {
+        return isFollowing;
+    } 
 }
