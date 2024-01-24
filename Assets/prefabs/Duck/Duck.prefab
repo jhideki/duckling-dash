@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5150822469742903785}
   - component: {fileID: 4341708747509255089}
   - component: {fileID: 6001636222716864198}
+  - component: {fileID: 8490506097862259312}
   m_Layer: 0
   m_Name: Duck
   m_TagString: Duck
@@ -77,7 +78,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1779516135
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -1322212864, guid: 6e0f4afe0274aca4984f39bbe028e7bc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -263,5 +264,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9492dd9aae0014c48b132f34fedb594c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8490506097862259312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3177720651346056840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db31b90c71f791649b172048146c923d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

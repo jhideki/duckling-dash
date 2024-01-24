@@ -253,8 +253,8 @@ MonoBehaviour:
   bushPrefab: {fileID: 5594614065306607260, guid: ed2f80eb86c1dae438dc0f090959fe31, type: 3}
   duckPrefab: {fileID: 3177720651346056840, guid: 4f813546c8fdce54a9e9db73a14b4f69, type: 3}
   mapPartitions: 2
-  minBushes: 8
-  maxBushes: 15
+  minBushes: 5
+  maxBushes: 8
   numDucklings: 10
   wallGenerator: {fileID: 0}
 --- !u!114 &1280203465624272465
@@ -427,7 +427,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 653353449
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
