@@ -7,6 +7,7 @@ public class Bush : MonoBehaviour
     public float playerOpacityInBush = 0.5f; // Opacity when player is in the bush
     public bool isHiding;
     private GameObject player;
+    private Hiding hiding;
 
     // Event to notify when the hiding state changes
     public event Action<bool> OnHidingStateChanged;
@@ -18,10 +19,12 @@ public class Bush : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Duck"))
         {
             isHiding = true;
             player = other.gameObject;
+            hiding = player.GetComponent<Hiding>();
+            hiding.SetHiding(true);
             StartCoroutine(AdjustPlayerOpacity(player, playerOpacityInBush));
             NotifyHidingStateChanged(true);
         }
@@ -29,11 +32,16 @@ public class Bush : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Duck"))
         {
             isHiding = false;
             player = other.gameObject;
-            StartCoroutine(AdjustPlayerOpacity(player, 1f)); // Reset opacity to 100%
+            hiding = player.GetComponent<Hiding>();
+            hiding.SetHiding(false);
+            if (player != null)
+            {
+                StartCoroutine(AdjustPlayerOpacity(player, 1f)); // Reset opacity to 100%
+            }
             NotifyHidingStateChanged(false);
         }
     }

@@ -8,7 +8,12 @@ public abstract class AbstractGenerator : MonoBehaviour
     [SerializeField] public SimpleRAndomWalkSO randomWalkParameters;
     [SerializeField] public GameObject hawkPrefab;
     [SerializeField] public GameObject backgroundPrefab;
+    [SerializeField] public GameObject bushPrefab;
+    [SerializeField] public GameObject duckPrefab;
     [SerializeField] public int mapPartitions;
+    [SerializeField] public int minBushes = 10;
+    [SerializeField] public int maxBushes = 15;
+    [SerializeField] public int numDucklings = 10;
     public WallGenerator wallGenerator;
 
     protected DrawBackground background;
@@ -46,8 +51,15 @@ public abstract class AbstractGenerator : MonoBehaviour
         //get hawk positions
         List<Vector2Int> hawkPositions = map.SetHawkPositions();
 
+        int numBushes = Random.Range(minBushes, maxBushes);
+
+        //get bush positions
+        List<Vector2Int> bushPositions = ProceduralGenerationAlgorithms.SetBushPositionsModified(numBushes, map.floorPositions, map.wallPositions, map.islandPositions);
+
         //Spawn hawks
-        map.spawner.SpawnObjects(hawkPositions, hawkPrefab);
+        yield return StartCoroutine(map.spawner.SpawnObjects(hawkPositions, hawkPrefab));
+        yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, bushPrefab));
+        yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, duckPrefab));
     }
 
     public IEnumerator DrawMapObjects(Map map, Map map2)
@@ -69,8 +81,15 @@ public abstract class AbstractGenerator : MonoBehaviour
         //get hawk positions
         List<Vector2Int> hawkPositions = map.SetHawkPositions();
 
+        int numBushes = Random.Range(minBushes, maxBushes);
+
+        //get bush positions
+        List<Vector2Int> bushPositions = ProceduralGenerationAlgorithms.SetBushPositionsModified(numBushes, map.floorPositions, map.wallPositions, map.islandPositions);
+
         //Spawn hawks
-        map.spawner.SpawnObjects(hawkPositions, hawkPrefab);
+        yield return StartCoroutine(map.spawner.SpawnObjects(hawkPositions, hawkPrefab));
+        yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, bushPrefab));
+        yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, duckPrefab));
     }
 
     public IEnumerator FillCorridor(Map map)

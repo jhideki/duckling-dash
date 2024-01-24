@@ -13,6 +13,7 @@ public class Map
     public HashSet<Vector2Int> wallPositions;
     public HashSet<Vector2Int> corridorPositions;
     public List<Vector2Int> hawkPositions;
+    public List<Vector2Int> bushPositions;
     public Spawner spawner;
     public DrawBackground background;
     public TileMapVisualizer tileMapVisualizer;
@@ -163,6 +164,12 @@ public class Map
         }
         return hawkPositions;
     }
+
+    public void SetBushPositions(List<Vector2Int> bushPositions)
+    {
+        this.bushPositions = bushPositions;
+    }
+
 
     public void ClearMap()
     {

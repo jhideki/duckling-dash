@@ -11,7 +11,7 @@ public class Spawner : MonoBehaviour
         mapObjects = new List<GameObject>();
     }
 
-    public void SpawnObjects(List<Vector2Int> spawnLocations, GameObject gameObj)
+    public IEnumerator SpawnObjects(List<Vector2Int> spawnLocations, GameObject gameObj)
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
@@ -25,6 +25,7 @@ public class Spawner : MonoBehaviour
                 GameObject newObj = Instantiate(gameObj, spawnPosition, Quaternion.identity);
                 mapObjects.Add(newObj);
             }
+            yield return null;
         }
     }
 

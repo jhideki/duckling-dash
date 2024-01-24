@@ -60,8 +60,8 @@ public class FollowParent : MonoBehaviour
 
     private Vector3 GetRandomPositionInBox()
     {
-        float x = Random.Range(spawnPoint.x - boxSize / 2.0f, spawnPoint.x + boxSize / 2.0f);
-        float y = Random.Range(spawnPoint.y - boxSize / 2.0f, spawnPoint.y + boxSize / 2.0f);
+        float x = Random.Range(spawnPoint.x, spawnPoint.x + boxSize);
+        float y = Random.Range(spawnPoint.y, spawnPoint.y + boxSize);
 
         return new Vector3(x, y, 0);
     }

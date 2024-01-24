@@ -26,6 +26,79 @@ public static class ProceduralGenerationAlgorithms
         return path;
     }
 
+    public static List<Vector2Int> SetBushPositionsModified(int bushCount, HashSet<Vector2Int> floorPositions, HashSet<Vector2Int> wallPositions, HashSet<Vector2Int> islandPositions)
+    {
+        List<Vector2Int> bushPositions = new List<Vector2Int>();
+        HashSet<Vector2Int> bushTracker = new HashSet<Vector2Int>();
+        List<Vector2Int> floorPositionsTemp = new List<Vector2Int>(floorPositions);
+
+        int attempts = 0;
+        int maxAttempts = 100; // Adjust this as needed
+
+        while (bushPositions.Count < bushCount && attempts < maxAttempts)
+        {
+            Vector2Int randomFloorPosition = floorPositionsTemp[Random.Range(0, floorPositionsTemp.Count)];
+
+            // Check if the 4x4 area is unoccupied by bushes, walls, and islands
+            if (IsAreaFree(randomFloorPosition, bushTracker, wallPositions, islandPositions))
+            {
+                // Add the 4x4 area to the list of occupied positions
+                AddOccupiedArea(randomFloorPosition, bushTracker);
+
+                // Add the bottom-left corner of the 4x4 area as the bush position
+                bushPositions.Add(randomFloorPosition);
+
+                // Remove the occupied positions from the temporary floor positions
+                RemoveOccupiedArea(floorPositionsTemp, randomFloorPosition);
+            }
+
+            attempts++;
+        }
+
+        return bushPositions;
+    }
+
+    private static bool IsAreaFree(Vector2Int bottomLeftCorner, HashSet<Vector2Int> bushTracker, HashSet<Vector2Int> wallPositions, HashSet<Vector2Int> islandPositions)
+    {
+        // Check if the 4x4 area is unoccupied by bushes, walls, and islands
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                Vector2Int position = bottomLeftCorner + new Vector2Int(i, j);
+
+                if (bushTracker.Contains(position) || wallPositions.Contains(position) || islandPositions.Contains(position))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private static void AddOccupiedArea(Vector2Int bottomLeftCorner, HashSet<Vector2Int> bushTracker)
+    {
+        // Add the 4x4 area to the set of occupied positions
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                Vector2Int position = bottomLeftCorner + new Vector2Int(i, j);
+                bushTracker.Add(position);
+            }
+        }
+    }
+
+    private static void RemoveOccupiedArea(List<Vector2Int> floorPositionsTemp, Vector2Int bottomLeftCorner)
+    {
+        // Remove the 4x4 area from the temporary floor positions
+        floorPositionsTemp.RemoveAll(position =>
+            position.x >= bottomLeftCorner.x && position.x < bottomLeftCorner.x + 4 &&
+            position.y >= bottomLeftCorner.y && position.y < bottomLeftCorner.y + 4
+        );
+    }
+
     public static HashSet<Vector2Int> Corridor(Map map, Vector2Int mapEdge, int direction)
     {
         HashSet<Vector2Int> path = new HashSet<Vector2Int>();
