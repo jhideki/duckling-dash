@@ -11,6 +11,7 @@ public class FollowParent : MonoBehaviour
     public float followSpeed;
     public float patrolSpeed = 1.0f; // Default patrol speed
     private FollowParent previousDuck;
+    private FollowParent nextDuck;
     public float followDistance = 1.5f;
     public bool isFollowing = false;
 
@@ -32,6 +33,11 @@ public class FollowParent : MonoBehaviour
     {
         if (target != null && isFollowing)
         {
+            if (!target.CompareTag("Player"))
+            {
+                previousDuck.SetNextDuck(this);
+            }
+
             // Follow the player within the defined distance
             Vector3 directionToPlayer = (target.position - transform.position).normalized;
             Vector3 targetPosition = target.position - directionToPlayer * followDistance;
@@ -79,16 +85,43 @@ public class FollowParent : MonoBehaviour
 
     public void StopFollowing()
     {
+        Debug.Log("GAYYYYYYYYYYYYYYYYYYYYYYYYY");
         isFollowing = false;
+        target = null;
+
+        // Disconnect from the previous duck
+        if (previousDuck != null)
+        {
+            previousDuck.SetNextDuck(null);
+        }
+
+        previousDuck = null;
+        
+
     }
 
     public void SetPreviousDuck(FollowParent duck)
     {
-        previousDuck = duck;
+       previousDuck = duck;
     }
 
     public FollowParent GetPreviousDuck()
     {
         return previousDuck;
     }
+
+    public void SetNextDuck(FollowParent duck)
+    {
+            nextDuck = duck;
+    }
+
+    public FollowParent GetNextDuck()
+    {
+        return nextDuck;
+    }
+
+    public bool IsFollowingPlayer()
+    {
+        return isFollowing;
+    } 
 }

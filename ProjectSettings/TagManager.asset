@@ -10,6 +10,8 @@ TagManager:
   - Floor
   - HawkSpawner
   - Bush
+  - FirePoint
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -49,6 +51,9 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Hunter
+    uniqueID: 2343537771
     locked: 0
   - name: Walls
     uniqueID: 653353449

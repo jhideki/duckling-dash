@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -2674644649438382447}
   - component: {fileID: 5150822469742903785}
   - component: {fileID: 4341708747509255089}
+  - component: {fileID: 6262628095278567247}
   m_Layer: 0
   m_Name: Duck
   m_TagString: Duck
@@ -252,3 +253,16 @@ MonoBehaviour:
   - {fileID: 1267182802, guid: 63f67f92e8feb9543812184dfbb8ed80, type: 3}
   frameRate: 4
   changeCutoff: 0.001
+--- !u!114 &6262628095278567247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3177720651346056840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db31b90c71f791649b172048146c923d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetDuck: {fileID: 0}
