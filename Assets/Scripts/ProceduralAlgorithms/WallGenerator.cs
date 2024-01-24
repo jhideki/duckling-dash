@@ -4,22 +4,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public static class WallGenerator
+public class WallGenerator : MonoBehaviour
 {
-    public static void CreateWalls(HashSet<Vector2Int> floorPositions, TileMapVisualizer tileMapVisualizer, HashSet<Vector2Int> islandWalls, HashSet<Vector2Int> outsideWalls)
-    {
-        foreach (var wall in outsideWalls)
-        {
-            tileMapVisualizer.PaintSingleBasicWall(wall);
-        }
-
-        foreach (var wall in islandWalls)
-        {
-            tileMapVisualizer.PaintSingleBasicWall(wall);
-        }
-    }
-
-    public static HashSet<Vector2Int> FindOutSideWalls(HashSet<Vector2Int> floorPositions, (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries)
+    public HashSet<Vector2Int> FindOutSideWalls(HashSet<Vector2Int> floorPositions, (Vector2Int, Vector2Int, Vector2Int, Vector2Int) boundaries)
     {
         HashSet<Vector2Int> outsideWalls = new HashSet<Vector2Int>();
 
@@ -37,6 +24,7 @@ public static class WallGenerator
                     break;
                 }
             }
+
         }
 
         for (int i = boundaries.Item1.x; i <= boundaries.Item2.x; i++)
@@ -53,6 +41,7 @@ public static class WallGenerator
                     break;
                 }
             }
+
         }
 
         for (int i = boundaries.Item3.y; i <= boundaries.Item1.y; i++)
@@ -69,8 +58,10 @@ public static class WallGenerator
                     break;
                 }
             }
+
         }
 
+        // Coroutine 4
         for (int i = boundaries.Item3.y; i <= boundaries.Item1.y; i++)
         {
             for (int j = boundaries.Item2.x; j >= boundaries.Item1.x; j--)
@@ -85,7 +76,10 @@ public static class WallGenerator
                     break;
                 }
             }
+
         }
+
+
         return outsideWalls;
     }
 

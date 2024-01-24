@@ -143,6 +143,7 @@ MonoBehaviour:
   moveSpeed: 5
   isMoving: 0
   isHiding: 0
+  canMove: 0
 --- !u!114 &3106893629132857134
 MonoBehaviour:
   m_ObjectHideFlags: 0

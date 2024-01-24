@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -36,6 +37,21 @@ public class TileMapVisualizer : MonoBehaviour
         }
     }
 
+    //async method for painting walls over a period of frames (10 wall per frame)
+    public IEnumerator PaintTilesAsync(HashSet<Vector2Int> positions)
+    {
+        int numElements = 0;
+        foreach (var position in new HashSet<Vector2Int>(positions))
+        {
+            PaintSingleTile(wallTilemap, wallTop, position);
+            numElements++;
+            if (numElements % 2 == 0)
+            {
+                yield return null;
+            }
+        }
+    }
+
     private void PaintSingleTile(Tilemap tilemap, TileBase tile, Vector2Int position)
     {
         var tilePosition = tilemap.WorldToCell((Vector3Int)position);
@@ -50,7 +66,15 @@ public class TileMapVisualizer : MonoBehaviour
     public void ClearWallTile(Vector2Int position)
     {
         var tilePosition = wallTilemap.WorldToCell((Vector3Int)position);
-        floorTilemap.SetTile(tilePosition, null);
+        wallTilemap.SetTile(tilePosition, null);
+    }
+
+    public void ClearWallTiles(HashSet<Vector2Int> positions)
+    {
+        foreach (var position in positions)
+        {
+            ClearWallTile(position);
+        }
     }
 
     public void ClearFloorTile(Vector2Int position)

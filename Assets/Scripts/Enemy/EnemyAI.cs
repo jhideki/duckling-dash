@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -7,17 +8,18 @@ public class EnemyAI : MonoBehaviour
     public float patrolRadius = 10f;
     public float visionRange = 3f;
     public float attackRange = 0.5f;
-    public float attackCooldown = 3f;
+    public float attackCooldown = 5f;
     public float attackSpeed = 7f;
 
-    private bool isAttacking;
     private float lastAttackTime;
-    private bool playerVisible;
 
-    private bool isPatrolling;
+    private bool isAttacking;
+    private bool isPatrolling = true;
+
+    private Bush bush;
+
     private Vector2 originalPosition;
     private GameObject targetObject;
-
     private float startingAngle;
 
     private bool isOnCooldown;
@@ -27,37 +29,26 @@ public class EnemyAI : MonoBehaviour
     {
         // Initialize original position at the start
         originalPosition = transform.position;
-        startingAngle = Random.Range(0f, 360f);
-        isPatrolling = true;
+        startingAngle = UnityEngine.Random.Range(0f, 360f);
 
-        Bush bush = FindObjectOfType<Bush>();
-        if (bush != null)
-        {
-            bush.OnHidingStateChanged += HandleHidingStateChanged;
-        }
+        // Find the Bush script in the scene
+        bush = FindObjectOfType<Bush>();
     }
 
     void Update()
     {
-        if (isAttacking && playerVisible)
+        if (bush.isHiding && isPatrolling && isAttacking)
+        {
+            // Player is hiding in a bush, resume patrolling
+            isAttacking = false;
+        }
+        if (isAttacking && !bush.isHiding)
         {
             Attack();
         }
-        else if (isPatrolling)
+        else if (isPatrolling || bush.isHiding)
         {
             PatrolCircle();
-        }
-    }
-
-    private void HandleHidingStateChanged(bool isHiding)
-    {
-        if (isHiding)
-        {
-            playerVisible = false;
-        }
-        else
-        {
-            playerVisible = true;
         }
     }
 
@@ -105,9 +96,8 @@ public class EnemyAI : MonoBehaviour
         Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, visionRange);
         foreach (Collider2D targetCollider in targets)
         {
-            if ((targetCollider.CompareTag("Player") || targetCollider.CompareTag("Duck")) && playerVisible)
+            if ((targetCollider.CompareTag("Player") || targetCollider.CompareTag("Duck")) && !bush.isHiding)
             {
-
                 StartAttack(targetCollider.gameObject);
                 return;
             }
@@ -123,15 +113,11 @@ public class EnemyAI : MonoBehaviour
     }
 
     void StartAttack(GameObject target)
-    {
-        // Transition from patrolling to attacking
-        isPatrolling = false;
-        isAttacking = true;
-
-
-
+    {   
         // Set the target object
         targetObject = target;
+
+        isAttacking = true;
     }
 
     void Attack()
@@ -139,11 +125,7 @@ public class EnemyAI : MonoBehaviour
         // Move towards the target object with attack speed
         if (targetObject != null)
         {
-            // Check if the player or duck is hiding in the bush
-            Bush bushComponent = targetObject.GetComponent<Bush>();
-
-            // Ensure that bushComponent is not null before accessing its properties
-            if (bushComponent != null && bushComponent.IsHiding)
+            if (bush.isHiding)
             {
                 // Player or duck is hiding in the bush, continue patrolling
                 StopAttack();
@@ -163,12 +145,18 @@ public class EnemyAI : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            // If the target object is null (destroyed or no longer visible), stop attacking
+            StopAttack();
+        }
     }
 
     void StopAttack()
     {
         // Transition from attacking to patrolling
         isAttacking = false;
+        isPatrolling = true;
         targetObject = null;
 
         // Start a cooldown before resuming patrolling
@@ -187,23 +175,68 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator AttackCooldown()
     {
-        // Move back to patrol area during cooldown
-        while (Vector2.Distance(transform.position, originalPosition) > 0.1f)
-        {
-            transform.position = Vector2.Lerp(transform.position, originalPosition, patrolSpeed * Time.deltaTime);
-            yield return null;
-        }
-
-        // Ensure exact position at the end of the lerp
-        transform.position = originalPosition;
-
-        // Resume patrolling immediately after returning to patrol area
-        isPatrolling = true;
+        // Store the initial position
+        Vector2 initialPosition = transform.position;
 
         // Wait for the cooldown duration
         yield return new WaitForSeconds(attackCooldown);
 
-        // Allow attacking again after a 2-second delay
-        isOnCooldown = false; // Reset cooldown flag for immediate attacks
+        // Allow attacking again after the cooldown
+        isOnCooldown = false;
+
+        // If the hawk has moved away during the cooldown, smoothly move back to the initial position
+        float startTime = Time.time;
+        float elapsedTime = 0f;
+        float journeyLength = Vector2.Distance(transform.position, initialPosition);
+
+        while (elapsedTime < 1.0f) // Smooth return over 1 second (adjust as needed)
+        {
+            elapsedTime = (Time.time - startTime) / attackCooldown;
+            float fractionOfJourney = elapsedTime;
+            transform.position = Vector2.Lerp(transform.position, initialPosition, fractionOfJourney);
+            yield return null;
+        }
+
+        // Ensure exact position at the end of the lerp
+        transform.position = initialPosition;
+
+        // Resume patrolling
+        isPatrolling = true;
     }
+
+    /*IEnumerator AttackCooldown()
+    {
+        // Store the initial position
+        Vector2 initialPosition = transform.position;
+
+        // Wait for the cooldown duration
+        yield return new WaitForSeconds(attackCooldown);
+
+        // Allow attacking again after the cooldown
+        isOnCooldown = false;
+
+        // Calculate the distance to the initial position
+        float distanceToInitial = Vector2.Distance(transform.position, initialPosition);
+
+        // If the hawk has moved away during the cooldown, smoothly move back to the initial position
+        if (distanceToInitial > 0.1f)
+        {
+            float startTime = Time.time;
+            float journeyLength = distanceToInitial;
+
+            while (Time.time < startTime + 1.0f) // 1.0f is the duration for the smooth return
+            {
+                float distCovered = (Time.time - startTime) * patrolSpeed;
+                float fractionOfJourney = distCovered / journeyLength;
+                transform.position = Vector2.Lerp(transform.position, initialPosition, fractionOfJourney);
+                yield return null;
+            }
+
+            // Ensure exact position at the end of the lerp
+            transform.position = initialPosition;
+        }
+
+        // Resume patrolling
+        isPatrolling = true;
+    }*/
 }

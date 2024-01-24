@@ -9,50 +9,86 @@ public abstract class AbstractGenerator : MonoBehaviour
     [SerializeField] public GameObject hawkPrefab;
     [SerializeField] public GameObject backgroundPrefab;
     [SerializeField] public int mapPartitions;
+    public WallGenerator wallGenerator;
 
-    protected Spawner spawner;
     protected DrawBackground background;
 
     public Map Generate()
     {
-        // Check if spawner is not assigned
-        if (spawner == null)
+        if (gameObject.GetComponent<WallGenerator>() == null)
         {
-            // Try to find the Spawner component on the current GameObject
-            spawner = GetComponent<Spawner>();
-
-            // If it's still null, add the Spawner component dynamically
-            if (spawner == null)
-            {
-                spawner = gameObject.AddComponent<Spawner>();
-            }
+            wallGenerator = gameObject.AddComponent<WallGenerator>();
         }
+        Spawner spawner = gameObject.AddComponent<Spawner>();
 
-        if (background == null)
-        {
-            // Try to find the Spawner component on the current GameObject
-            background = GetComponent<DrawBackground>();
-
-            // If it's still null, add the Spawner component dynamically
-            if (background == null)
-            {
-                background = gameObject.AddComponent<DrawBackground>();
-            }
-        }
+        DrawBackground background = gameObject.AddComponent<DrawBackground>();
 
         Map map = new Map(tileMapVisualizer, spawner, background);
 
+
         return map;
+    }
+
+    public IEnumerator DrawMapObjects(Map map)
+    {
+        //Partition map should occur after map is shifted
+        map.SetPartitions(mapPartitions);
+
+        //draw background
+        map.background.drawBackground(backgroundPrefab, map.boundaries);
+        //Draw walls and islands
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.wallPositions));
+
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.islandPositions));
+
+        tileMapVisualizer.ClearWallTiles(map.corridorPositions);
+
+        //get hawk positions
+        List<Vector2Int> hawkPositions = map.SetHawkPositions();
+
+        //Spawn hawks
+        map.spawner.SpawnObjects(hawkPositions, hawkPrefab);
+    }
+
+    public IEnumerator DrawMapObjects(Map map, Map map2)
+    {
+        //Partition map should occur after map is shifted
+        map.SetPartitions(mapPartitions);
+
+        //Draw walls and islands
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.wallPositions));
+
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.islandPositions));
+
+        tileMapVisualizer.ClearWallTiles(map.corridorPositions);
+
+        tileMapVisualizer.ClearWallTiles(map2.corridorPositions);
+        //draw background
+        map.background.drawBackground(backgroundPrefab, map.boundaries);
+
+        //get hawk positions
+        List<Vector2Int> hawkPositions = map.SetHawkPositions();
+
+        //Spawn hawks
+        map.spawner.SpawnObjects(hawkPositions, hawkPrefab);
+    }
+
+    public IEnumerator FillCorridor(Map map)
+    {
+        //paint corridor
+        yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.corridorPositions));
+
+        //update map data
+        //map.PaintCorridor();
     }
 
 
     public void ClearTiles()
     {
         tileMapVisualizer.Clear();
-        spawner.ClearObjects();
         background.clearBackground();
     }
 
     public abstract void RunProceduralGeneration(Map map, Vector2Int startPosition);
-    public abstract void DrawMapObjects(Map map);
+    public abstract void CreateCorridor(Map map, int mapEdge, Map map2);
 }

@@ -35,5 +35,6 @@ public class Spawner : MonoBehaviour
             DestroyImmediate(obj);
         }
         mapObjects.Clear();
+        Destroy(this);
     }
 }
