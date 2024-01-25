@@ -6,22 +6,24 @@ using System.ComponentModel.Design;
 
 public class EnemyAI : MonoBehaviour
 {
-    public float patrolSpeed = 2f;
-    public float patrolRadius = 10f;
+    public float patrolSpeed = .5f;
+    public float patrolRadius = 7f;
     public float visionRange = 3f;
-    public float attackSpeed = 7f;
+    public float attackCooldown = 5f;
+    public float currentCooldown;
+    public float attackSpeed = 5.5f;
+    private float currentAngle = 0f;
+    public float distance = 0.1f;
 
-    private float lastAttackTime;
-
+    private bool isClockwise;
     private bool isAttacking;
     private bool isPatrolling = true;
+    private bool onCooldown = false;
 
     public Bush bush;
-    private Rigidbody2D rb;
+
     private Transform currentTarget;
 
-    private float currentAngle = 0f;
-    private bool isClockwise;
     private Vector2 spawnPoint;
 
     private Coroutine returnToPatrolCoroutine;
@@ -29,7 +31,6 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         currentAngle = UnityEngine.Random.Range(0f, 360f);
         isClockwise = UnityEngine.Random.Range(0, 2) == 0 ? true : false;
         spawnPoint = transform.position;
@@ -40,33 +41,47 @@ public class EnemyAI : MonoBehaviour
         if (bush.isHiding && isAttacking)
         {
             currentTarget = null;
-            //returnToPatrolCoroutine = StartCoroutine(ReturnToPath());
-            isPatrolling = true;
             isAttacking = false;
+            returnToPatrolCoroutine = StartCoroutine(ReturnToPath());
         }
 
-        if (!isAttacking && isPatrolling)
+        if ((!isAttacking && isPatrolling) || onCooldown)
         {
             PatrolInCircle();
         }
-        else if (isAttacking && !bush.isHiding)
+        else if (isAttacking && !bush.isHiding && !onCooldown)
         {
             isPatrolling = false;
             AttackTarget();
         }
+        
+        if (!IsOnPatrolPath() && onCooldown) 
+        {
+            // Perform an action when not on patrol path
+            StartCoroutine(ReturnToPath());
+        }
+    }
 
-        CheckAndDeleteIfFar();
+    bool IsOnPatrolPath()
+    {
+        // Calculate the distance between the Hawk and its patrol path
+        float distanceToPatrolPath = Vector2.Distance(transform.position, GetNextPosition());
+
+        // Check if the distance is within a threshold
+        return distanceToPatrolPath < distance;
     }
 
     void OnTriggerEnter2D(Collider2D target)
-    {        
+    {
         // Check if the collider belongs to the target
-        if (target.CompareTag("Player") || target.CompareTag("Duck"))
+        if ((target.CompareTag("Player") || target.CompareTag("Duck")) && !onCooldown)
         {
             // Destroy the target
-            Destroy(target.gameObject);
-            currentTarget = null;
-            //StartCoroutine(ReturnToPath());
+            //Destroy(target.gameObject);
+            Debug.Log("Destroy");
+            isAttacking = false;
+            onCooldown = true;
+            StartCoroutine(StartCountdown());
         }
     }
 
@@ -89,8 +104,53 @@ public class EnemyAI : MonoBehaviour
 
         CheckForTargets();
     }
-    
-    /*IEnumerator ReturnToPath()
+
+    void CheckForTargets()
+    {
+        // Check for targets within the vision range
+        Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, visionRange);
+
+        // Iterate through detected targets
+        foreach (Collider2D target in targets)
+        {
+            if ((target.CompareTag("Player") || target.CompareTag("Duck")) && !bush.isHiding)
+            {
+                isAttacking = true;
+                currentTarget = target.transform;
+            }
+        }
+    }
+
+    void AttackTarget()
+    {
+        if (currentTarget != null && !onCooldown)
+        {
+            // Calculate the direction towards the target
+            Vector2 direction = (currentTarget.position - transform.position).normalized;
+
+            // Move the Hawk towards the target
+            transform.position += new Vector3(direction.x, direction.y, 0) * attackSpeed * Time.deltaTime;
+        }
+    }
+
+    IEnumerator StartCountdown()
+    {
+        float timer = attackCooldown;
+
+        while (timer > 0)
+        {
+            // Decrease the timer by deltaTime
+            timer -= Time.deltaTime;
+
+            // Wait for the next frame
+            yield return null;
+        }
+        onCooldown = false;
+        currentTarget = null;
+        isAttacking = false;
+    }
+
+    IEnumerator ReturnToPath()
     {
         Vector2 targetPosition = GetNextPosition();
 
@@ -102,6 +162,10 @@ public class EnemyAI : MonoBehaviour
 
         // Reset coroutine reference
         returnToPatrolCoroutine = null;
+
+        // Reset patrolling
+        isPatrolling = true;
+        isAttacking = false;
     }
 
     Vector2 GetNextPosition()
@@ -109,41 +173,5 @@ public class EnemyAI : MonoBehaviour
         float x = spawnPoint.x + Mathf.Cos(currentAngle) * patrolRadius;
         float y = spawnPoint.y + Mathf.Sin(currentAngle) * patrolRadius;
         return new Vector2(x, y);
-    }*/
-
-    void CheckForTargets()
-    {
-        // Check for targets within the vision range
-        Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, visionRange);
-
-        // Iterate through detected targets
-        foreach (Collider2D target in targets)
-        {   
-            if ((target.CompareTag("Player") || target.CompareTag("Duck")) && !bush.isHiding)
-            {
-                isAttacking = true;
-                currentTarget = target.transform;
-            }
-        }
-    }
-
-    void AttackTarget()
-    {
-        if (currentTarget != null)
-        {
-            // Calculate the direction towards the target
-            Vector2 direction = (currentTarget.position - transform.position).normalized;
-
-            // Move the Hawk towards the target using a force
-            rb.AddForce(direction * attackSpeed, ForceMode2D.Force);
-        }   
-    }
-
-        void CheckAndDeleteIfFar()
-    {
-        if (Vector2.Distance(transform.position, GameObject.FindWithTag("Player").transform.position) > hawkDistance)
-        {
-            Destroy(gameObject);
-        }
     }
 }
