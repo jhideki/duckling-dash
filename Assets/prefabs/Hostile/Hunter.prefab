@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5755756564231842726}
   - component: {fileID: 4591724631129007233}
   - component: {fileID: 7850834043719925507}
+  - component: {fileID: -8008854999445507930}
   m_Layer: 0
   m_Name: Hunter
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 748660772941490608}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.73, y: 1.87, z: 0}
+  m_LocalPosition: {x: 1, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1951429525
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 1826636989, guid: 22ed16537f4699b4cb486feedcfdeb05, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -176,6 +177,18 @@ MonoBehaviour:
   - {fileID: 121216344, guid: c13b080bd078b694bb39785279cd52af, type: 3}
   buffer: 0
   frameRate: 4
+--- !u!114 &-8008854999445507930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748660772941490608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83fd46ed94829a24a8188d57e14c68e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6929399269581690866
 GameObject:
   m_ObjectHideFlags: 0
