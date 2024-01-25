@@ -52,11 +52,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Hunter
-    uniqueID: 2343537771
+  - name: Floor
+    uniqueID: 3373783971
     locked: 0
   - name: Walls
     uniqueID: 653353449
+    locked: 0
+  - name: Hunter
+    uniqueID: 2343537771
     locked: 0
   - name: Bush
     uniqueID: 2799514057

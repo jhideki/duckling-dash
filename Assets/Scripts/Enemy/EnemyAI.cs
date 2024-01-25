@@ -6,11 +6,12 @@ using System.ComponentModel.Design;
 
 public class EnemyAI : MonoBehaviour
 {
-    public float patrolSpeed = .5f;
-    public float patrolRadius = 7f;
+    public float patrolSpeed = 2f;
+    public float patrolRadius = 10f;
     public float visionRange = 3f;
-    public float attackSpeed = 5.5f;
-    public float hawkDistance = 200f;
+    public float attackSpeed = 7f;
+
+    private float lastAttackTime;
 
     private bool isAttacking;
     private bool isPatrolling = true;
