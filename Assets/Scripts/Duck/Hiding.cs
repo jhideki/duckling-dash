@@ -14,13 +14,6 @@ public class Hiding : MonoBehaviour
     public void SetHiding(bool hiding)
     {
         isHiding = hiding;
-
-        if (hiding)
-        {
-            isUnderwater = true;
-            startTime = Time.time;
-            hidingTimeElapsed = false; // Reset hidingTimeElapsed when starting to hide
-        }
     }
 
     public bool GetHiding()

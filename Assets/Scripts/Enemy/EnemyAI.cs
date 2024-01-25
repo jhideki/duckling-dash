@@ -19,8 +19,9 @@ public class EnemyAI : MonoBehaviour
     private bool isAttacking;
     private bool isPatrolling = true;
     private bool onCooldown = false;
+    private Hiding hiding;
 
-    public Bush bush;
+    private bool isHiding;
 
     private Transform currentTarget;
 
@@ -38,7 +39,7 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        if (bush.isHiding && isAttacking)
+        if (isHiding && isAttacking)
         {
             currentTarget = null;
             isAttacking = false;
@@ -49,13 +50,13 @@ public class EnemyAI : MonoBehaviour
         {
             PatrolInCircle();
         }
-        else if (isAttacking && !bush.isHiding && !onCooldown)
+        else if (isAttacking && !isHiding && !onCooldown)
         {
             isPatrolling = false;
             AttackTarget();
         }
-        
-        if (!IsOnPatrolPath() && onCooldown) 
+
+        if (!IsOnPatrolPath() && onCooldown)
         {
             // Perform an action when not on patrol path
             StartCoroutine(ReturnToPath());
@@ -81,6 +82,8 @@ public class EnemyAI : MonoBehaviour
             Debug.Log("Destroy");
             isAttacking = false;
             onCooldown = true;
+            hiding = target.gameObject.GetComponent<Hiding>();
+            isHiding = hiding.GetHiding();
             StartCoroutine(StartCountdown());
         }
     }
@@ -113,7 +116,7 @@ public class EnemyAI : MonoBehaviour
         // Iterate through detected targets
         foreach (Collider2D target in targets)
         {
-            if ((target.CompareTag("Player") || target.CompareTag("Duck")) && !bush.isHiding)
+            if ((target.CompareTag("Player") || target.CompareTag("Duck")) && !isHiding)
             {
                 isAttacking = true;
                 currentTarget = target.transform;
