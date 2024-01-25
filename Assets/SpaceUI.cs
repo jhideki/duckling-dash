@@ -7,10 +7,9 @@ public class SpaceUI : MonoBehaviour
 {
     private Image buttonImage;
     private Color normalColor;
-    private Color pressedColor = Color.grey; // Change this to the desired grey color
+    private Color pressedColor = Color.grey; // Desired grey color
 
-    public float cooldownDuration = 1.0f; // Adjust this value for the cooldown duration
-    private bool isOnCooldown = false;
+    public float fillDuration = 3.5f; // Adjust this value for the total duration of the fill effect
 
     private void Start()
     {
@@ -23,34 +22,35 @@ public class SpaceUI : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isOnCooldown)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            // Change the button colors based on its current state
-            ChangeButtonColors();
-
-            // Start cooldown
-            StartCoroutine(Cooldown());
+            // Start fill effect coroutine
+            StartCoroutine(FillButton());
         }
     }
 
-    private void ChangeButtonColors()
+    private IEnumerator FillButton()
     {
-        // Set to pressed color
-        buttonImage.color = pressedColor;
-    }
+        float elapsedTime = 0f;
+        Color startColor = pressedColor;
+        Color targetColor = normalColor;
 
-    private IEnumerator Cooldown()
-    {
-        // Set cooldown flag to true
-        isOnCooldown = true;
+        while (elapsedTime < fillDuration)
+        {
+            // Calculate the lerp factor based on elapsed time and total duration
+            float lerpFactor = elapsedTime / fillDuration;
 
-        // Wait for the specified cooldown duration
-        yield return new WaitForSeconds(cooldownDuration);
+            // Lerp between startColor and targetColor
+            buttonImage.color = Color.Lerp(startColor, targetColor, lerpFactor);
 
-        // Set to normal color
-        buttonImage.color = normalColor;
+            // Wait for the next frame
+            yield return null;
 
-        // Set cooldown flag to false
-        isOnCooldown = false;
+            // Update elapsed time
+            elapsedTime += Time.deltaTime;
+        }
+
+        // Ensure the final color is exactly the target color
+        buttonImage.color = targetColor;
     }
 }

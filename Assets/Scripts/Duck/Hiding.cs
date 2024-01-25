@@ -7,10 +7,20 @@ public class Hiding : MonoBehaviour
     private bool isHiding;
     private bool isUnderwater;
     private float startTime;
+    private bool hidingTimeElapsed; // New variable to track hiding time
+
     public float hidingTime = 3f;
+
     public void SetHiding(bool hiding)
     {
         isHiding = hiding;
+
+        if (hiding)
+        {
+            isUnderwater = true;
+            startTime = Time.time;
+            hidingTimeElapsed = false; // Reset hidingTimeElapsed when starting to hide
+        }
     }
 
     public bool GetHiding()
@@ -32,8 +42,9 @@ public class Hiding : MonoBehaviour
             {
                 SetHiding(false);
                 isUnderwater = false; // Set isUnderwater to false when hiding ends
+                hidingTimeElapsed = true; // Set hidingTimeElapsed to true when hiding ends
             }
-            else if (Input.GetKeyDown(KeyCode.Space))
+            else if (Input.GetKeyDown(KeyCode.Space) && hidingTimeElapsed)
             {
                 isHiding = false;
                 isUnderwater = false;
@@ -42,11 +53,9 @@ public class Hiding : MonoBehaviour
         else
         {
             // Check for user input to start hiding
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !isHiding)
             {
                 SetHiding(true);
-                isUnderwater = true;
-                startTime = Time.time;
             }
         }
     }
