@@ -5,9 +5,11 @@ using System;
 public class Bush : MonoBehaviour
 {
     public float playerOpacityInBush = 0.5f; // Opacity when player is in the bush
-    public bool isHiding;
+    public bool isHiding = true;
     private GameObject player;
     private Hiding hiding;
+
+    public event Action<bool> OnIsHidingChange;
 
     // Event to notify when the hiding state changes
     public event Action<bool> OnHidingStateChanged;
@@ -15,6 +17,14 @@ public class Bush : MonoBehaviour
     public bool IsHiding
     {
         get { return isHiding; }
+        set
+        {
+            if(isHiding != value)
+            {
+                isHiding = value;
+                OnIsHidingChange?.Invoke(isHiding);
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -25,7 +35,7 @@ public class Bush : MonoBehaviour
             player = other.gameObject;
             hiding = player.GetComponent<Hiding>();
             hiding.SetHiding(true);
-            StartCoroutine(AdjustPlayerOpacity(player, playerOpacityInBush));
+            //StartCoroutine(AdjustPlayerOpacity(player, playerOpacityInBush));
             NotifyHidingStateChanged(true);
         }
     }
@@ -38,10 +48,6 @@ public class Bush : MonoBehaviour
             player = other.gameObject;
             hiding = player.GetComponent<Hiding>();
             hiding.SetHiding(false);
-            if (player != null)
-            {
-                StartCoroutine(AdjustPlayerOpacity(player, 1f)); // Reset opacity to 100%
-            }
             NotifyHidingStateChanged(false);
         }
     }
@@ -52,7 +58,7 @@ public class Bush : MonoBehaviour
         OnHidingStateChanged?.Invoke(newState);
     }
 
-    IEnumerator AdjustPlayerOpacity(GameObject player, float targetOpacity)
+    /*IEnumerator AdjustPlayerOpacity(GameObject player, float targetOpacity)
     {
         SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
         Color currentColor = playerRenderer.color;
@@ -75,5 +81,5 @@ public class Bush : MonoBehaviour
         }
 
         playerRenderer.color = targetColor; // Ensure exact color at the end of the lerp
-    }
+    }*/
 }

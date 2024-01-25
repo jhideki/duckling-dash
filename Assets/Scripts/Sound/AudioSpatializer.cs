@@ -17,23 +17,26 @@ public class AudioSpatializer : MonoBehaviour
     {
         if (playerTransform == null)
         {
-            Debug.Log("Pplayer transform is nul");
+            Debug.Log("Player transform is null");
         }
         if (audioSource == null)
         {
             Debug.Log("audio not assigned");
         }
 
-        // Calculate distance between player and audio source
-        float distance = Vector3.Distance(playerTransform.position, transform.position);
+        if (playerTransform != null)
+        {
+            // Calculate distance between player and audio source
+            float distance = Vector3.Distance(playerTransform.position, transform.position);
 
-        // Adjust volume based on distance
-        float volume = 1f - Mathf.Clamp01(distance / maxDistance);
-        audioSource.volume = volume;
+            // Adjust volume based on distance
+            float volume = 1f - Mathf.Clamp01(distance / maxDistance);
+            audioSource.volume = volume;
 
-        // Calculate panning based on player's position relative to the audio source
-        Vector3 relativePosition = playerTransform.position - transform.position;
-        float pan = Mathf.Clamp(relativePosition.x / maxDistance, -1f, 1f);
-        audioSource.panStereo = pan;
+            // Calculate panning based on player's position relative to the audio source
+            Vector3 relativePosition = playerTransform.position - transform.position;
+            float pan = Mathf.Clamp(relativePosition.x / maxDistance, -1f, 1f);
+            audioSource.panStereo = pan;
+        }
     }
 }

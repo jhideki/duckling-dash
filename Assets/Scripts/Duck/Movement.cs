@@ -1,26 +1,21 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public float moveSpeed = 5f; // Adjust this to set the default movement speed
-    public bool isMoving;
-    public bool isHiding;
-    public bool canMove;
+    public float moveSpeed = 5f;
+    public bool canMove = true;
 
     private Rigidbody2D rb;
     private float horizontalInput;
     private float verticalInput;
 
+    public Bush bush;
+
     void Start()
     {
-        canMove = true;
+        canMove = true; 
         rb = GetComponent<Rigidbody2D>();
-
-        Bush bush = FindObjectOfType<Bush>();
-        if (bush != null)
-        {
-            bush.OnHidingStateChanged += HandleHidingStateChanged;
-        }
     }
 
     void Update()
@@ -29,33 +24,18 @@ public class Movement : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
-        isMoving = rb.velocity.magnitude > 0.1f;
-    }
+        Vector2 movement = new Vector2(horizontalInput, verticalInput); 
 
-    void FixedUpdate()
-    {
-        // Calculate movement vector
-        Vector2 movement = new Vector2(horizontalInput, verticalInput);
+        rb.velocity = movement * moveSpeed;
 
-        // Normalize the movement vector to ensure consistent speed in all directions
-        movement.Normalize();
-
-        // Adjust movement speed based on hiding status
-        float currentMoveSpeed = isHiding ? moveSpeed * 0.5f : moveSpeed;
-
-        // Move the player
         if (canMove)
         {
-            rb.velocity = movement * currentMoveSpeed;
+            movement.Normalize();   
+            rb.velocity = movement * moveSpeed;
         }
         else
         {
             rb.velocity = Vector2.zero;
         }
-    }
-
-    private void HandleHidingStateChanged(bool isHiding)
-    {
-        this.isHiding = isHiding;
     }
 }
