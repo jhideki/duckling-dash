@@ -78,8 +78,6 @@ public class EnemyAI : MonoBehaviour
         if ((target.CompareTag("Player") || target.CompareTag("Duck")) && !onCooldown)
         {
             // Destroy the target
-            //Destroy(target.gameObject);
-            Debug.Log("Destroy");
             isAttacking = false;
             onCooldown = true;
             hiding = target.gameObject.GetComponent<Hiding>();

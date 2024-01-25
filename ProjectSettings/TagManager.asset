@@ -70,3 +70,6 @@ TagManager:
   - name: Hawk
     uniqueID: 2762070429
     locked: 0
+  - name: Loading
+    uniqueID: 2177325879
+    locked: 0

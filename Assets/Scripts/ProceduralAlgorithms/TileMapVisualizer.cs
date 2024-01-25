@@ -25,8 +25,10 @@ public class TileMapVisualizer : MonoBehaviour
     }
     public IEnumerator PaintFoliageTiles(HashSet<Vector2Int> positions)
     {
+        int count = 0;
         foreach (var position in positions)
         {
+            count++;
             int random = Random.Range(0, 30);
             if (random == 1 || random == 2)
             {
@@ -40,7 +42,11 @@ public class TileMapVisualizer : MonoBehaviour
             {
                 PaintSingleTile(foliageTilemap, folliageTile3, position);
             }
-            yield return null;
+
+            if (count % 10 == 0)
+            {
+                yield return null;
+            }
         }
 
     }
@@ -57,7 +63,6 @@ public class TileMapVisualizer : MonoBehaviour
             pos = waterPositions[random];
             if (!objPositions.Contains(pos))
             {
-                Debug.Log("this never runs");
                 if (random2 == 1)
                 {
                     PaintSingleTile(foliageTilemap, rockTile, pos);

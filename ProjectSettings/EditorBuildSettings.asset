@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/basic mechs.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/Intro.unity
     guid: e25fc7355820f984aaa29acc1da5bc49
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Noah pt2.unity
     guid: cee347450b15ca742853909e8e611455
   - enabled: 1

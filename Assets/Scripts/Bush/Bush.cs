@@ -16,7 +16,11 @@ public class Bush : MonoBehaviour
             player = other.gameObject;
             hiding = player.GetComponent<Hiding>();
             hiding.SetHiding(true);
-            StartCoroutine(AdjustPlayerOpacity(player, playerOpacityInBush));
+            if (player != null)
+            {
+
+                StartCoroutine(AdjustPlayerOpacity(player, playerOpacityInBush));
+            }
         }
     }
 
@@ -28,12 +32,20 @@ public class Bush : MonoBehaviour
             player = other.gameObject;
             hiding = player.GetComponent<Hiding>();
             hiding.SetHiding(false);
-            StartCoroutine(AdjustPlayerOpacity(player, 1f));
+            if (player != null)
+            {
+
+                StartCoroutine(AdjustPlayerOpacity(player, 1f));
+            }
         }
     }
 
     IEnumerator AdjustPlayerOpacity(GameObject player, float targetOpacity)
     {
+        if (player == null)
+        {
+            yield break;
+        }
         SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
         Color currentColor = playerRenderer.color;
         Color targetColor = new Color(currentColor.r, currentColor.g, currentColor.b, targetOpacity);

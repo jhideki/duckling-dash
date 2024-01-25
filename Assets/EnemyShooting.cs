@@ -14,7 +14,7 @@ public class EnemyShooting : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      
+
     }
 
     // Update is called once per frame
@@ -26,7 +26,6 @@ public class EnemyShooting : MonoBehaviour
         hiding = closestTarget.GetComponent<Hiding>();
         if (closestTarget != null && !hiding.GetHiding())
         {
-            Debug.Log(hiding);
             float distance = Vector2.Distance(transform.position, closestTarget.transform.position);
 
             if (distance < radius)
