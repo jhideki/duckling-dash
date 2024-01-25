@@ -10,7 +10,7 @@ public class EnemyShooting : MonoBehaviour
     public float angle = 25f;
 
     private float timer;
-    
+    private Hiding hiding;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,9 +23,10 @@ public class EnemyShooting : MonoBehaviour
         timer += Time.deltaTime;
 
         GameObject closestTarget = FindClosestTarget();
-
-        if (closestTarget != null)
+        hiding = closestTarget.GetComponent<Hiding>();
+        if (closestTarget != null && !hiding.GetHiding())
         {
+            Debug.Log(hiding);
             float distance = Vector2.Distance(transform.position, closestTarget.transform.position);
 
             if (distance < radius)

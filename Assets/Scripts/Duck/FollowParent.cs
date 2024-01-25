@@ -22,6 +22,9 @@ public class FollowParent : MonoBehaviour
     private float patrolTimer = 0.0f;
     public float patrolDuration = 1.0f; // Minimum time to patrol in one direction
 
+    private FollowParent firstDuck;
+    private int deletedDuckCount = 0;
+
     // Update is called once per frame
     void Start()
     {
@@ -98,6 +101,41 @@ public class FollowParent : MonoBehaviour
         previousDuck = null;
         
 
+    }
+
+    // Method to free and delete all objects in the chain
+    public void FreeAndDeleteAllDucks(FollowParent duck)
+    {
+        Debug.Log("FreeAndDeleteAllDucks called!");
+
+        FollowParent currentDuck = duck;
+
+        while (currentDuck != null)
+        {
+            Debug.Log("NOT NULLL");
+            FollowParent prevDuck = currentDuck.GetPreviousDuck();
+            FollowParent nextDuck = currentDuck.GetNextDuck();
+
+            currentDuck = prevDuck;
+            Destroy(nextDuck.gameObject); // Destroy the GameObject associated with the FollowParent script
+
+            deletedDuckCount++;
+          
+        }
+
+        Debug.Log("Deleted " + deletedDuckCount + " ducks.");
+    }
+
+    // Method to set the first duck in the chain
+    public void SetFirstDuck(FollowParent duck)
+    {
+        firstDuck = duck;
+    }
+
+    // Method to get the number of deleted ducks
+    public int GetDeletedDuckCount()
+    {
+        return deletedDuckCount;
     }
 
     public void SetPreviousDuck(FollowParent duck)
