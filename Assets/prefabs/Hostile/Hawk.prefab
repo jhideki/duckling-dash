@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3031077564918499561}
   - component: {fileID: 3257912742844552133}
   - component: {fileID: -419336311019732553}
-  - component: {fileID: 5489558209707234743}
-  - component: {fileID: 5275672655486512972}
+  - component: {fileID: 3351768491442885041}
+  - component: {fileID: 2618719206367619536}
   - component: {fileID: 8550303159176326271}
   - component: {fileID: -1896483466022375611}
   - component: {fileID: 4435177532017522725}
@@ -103,12 +103,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb03cfe46c62a574ab1e704e2d5c3782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 25
+  patrolSpeed: 0.6
   patrolRadius: 7
   visionRange: 3
-  attackRange: 1
-  attackCooldown: 5
-  attackSpeed: 8
+  attackSpeed: 5.5
+  bush: {fileID: 0}
 --- !u!114 &-419336311019732553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +137,7 @@ MonoBehaviour:
   - {fileID: -1081639279, guid: e5608b13becbc4c478b537fe3e09100e, type: 3}
   frameRate: 5
   changeCutoff: 0
---- !u!50 &5489558209707234743
+--- !u!50 &3351768491442885041
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -147,7 +146,7 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3909654939896017668}
   m_BodyType: 0
-  m_Simulated: 0
+  m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
@@ -165,7 +164,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &5275672655486512972
+--- !u!58 &2618719206367619536
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -195,11 +194,11 @@ CircleCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 1
+  m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0014858246, y: -0.0011456013}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.38420653
 --- !u!114 &8550303159176326271
 MonoBehaviour:
   m_ObjectHideFlags: 0

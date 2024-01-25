@@ -2,200 +2,176 @@ using System.Collections;
 using UnityEngine;
 using System;
 using Unity.VisualScripting;
+using System.ComponentModel.Design;
 
 public class EnemyAI : MonoBehaviour
 {
-    public float patrolSpeed = 2f;
-    public float patrolRadius = 10f;
+    public float patrolSpeed = .5f;
+    public float patrolRadius = 7f;
     public float visionRange = 3f;
-    public float attackRange = 0.5f;
     public float attackCooldown = 5f;
-    public float attackSpeed = 7f;
+    public float currentCooldown;
+    public float attackSpeed = 5.5f;
+    private float currentAngle = 0f;
+    public float distance = 0.1f;
 
-    private float lastAttackTime;
-
+    private bool isClockwise;
     private bool isAttacking;
     private bool isPatrolling = true;
-    private Vector2 originalPosition;
-    private GameObject targetObject;
-    private float startingAngle;
+    private bool onCooldown = false;
 
-    private bool isOnCooldown;
-    private Coroutine cooldownCoroutine;
-    private Hiding hiding;
-    private bool isHiding;
+    public Bush bush;
+
+    private Transform currentTarget;
+
+    private Vector2 spawnPoint;
+
+    private Coroutine returnToPatrolCoroutine;
+
 
     void Start()
     {
-        // Initialize original position at the start
-        originalPosition = transform.position;
-        startingAngle = UnityEngine.Random.Range(0f, 360f);
-        isHiding = false;
-        // Find the Bush script in the scene
+        currentAngle = UnityEngine.Random.Range(0f, 360f);
+        isClockwise = UnityEngine.Random.Range(0, 2) == 0 ? true : false;
+        spawnPoint = transform.position;
     }
 
     void Update()
     {
-        if (isHiding && isPatrolling && isAttacking)
+        if (bush.isHiding && isAttacking)
         {
-            // Player is hiding in a bush, resume patrolling
+            currentTarget = null;
             isAttacking = false;
+            returnToPatrolCoroutine = StartCoroutine(ReturnToPath());
         }
-        if (isAttacking && !isHiding)
+
+        if ((!isAttacking && isPatrolling) || onCooldown)
         {
-            Attack();
+            PatrolInCircle();
         }
-        else if (isPatrolling || isHiding)
+        else if (isAttacking && !bush.isHiding && !onCooldown)
         {
-            PatrolCircle();
+            isPatrolling = false;
+            AttackTarget();
+        }
+        
+        if (!IsOnPatrolPath() && onCooldown) 
+        {
+            // Perform an action when not on patrol path
+            StartCoroutine(ReturnToPath());
         }
     }
 
-    void PatrolCircle()
+    bool IsOnPatrolPath()
     {
+        // Calculate the distance between the Hawk and its patrol path
+        float distanceToPatrolPath = Vector2.Distance(transform.position, GetNextPosition());
+
+        // Check if the distance is within a threshold
+        return distanceToPatrolPath < distance;
+    }
+
+    void OnTriggerEnter2D(Collider2D target)
+    {
+        // Check if the collider belongs to the target
+        if ((target.CompareTag("Player") || target.CompareTag("Duck")) && !onCooldown)
+        {
+            // Destroy the target
+            //Destroy(target.gameObject);
+            Debug.Log("Destroy");
+            isAttacking = false;
+            onCooldown = true;
+            StartCoroutine(StartCountdown());
+        }
+    }
+
+    void PatrolInCircle()
+    {
+        float x = spawnPoint.x + Mathf.Cos(currentAngle) * patrolRadius;
+        float y = spawnPoint.y + Mathf.Sin(currentAngle) * patrolRadius;
+        transform.position = new Vector3(x, y, transform.position.z);
+
+        currentAngle += isClockwise ? Time.deltaTime * patrolSpeed : -Time.deltaTime * patrolSpeed;
+
+        if (currentAngle >= 360f)
+        {
+            currentAngle -= 360f;
+        }
+        else if (currentAngle < 0f)
+        {
+            currentAngle += 360f;
+        }
+
+        CheckForTargets();
+    }
+
+    void CheckForTargets()
+    {
+        // Check for targets within the vision range
         Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, visionRange);
-        foreach (Collider2D targetCollider in targets)
+
+        // Iterate through detected targets
+        foreach (Collider2D target in targets)
         {
-            if (targetCollider.CompareTag("Player") || targetCollider.CompareTag("Duck"))
+            if ((target.CompareTag("Player") || target.CompareTag("Duck")) && !bush.isHiding)
             {
-                targetObject = targetCollider.gameObject;
-                hiding = targetObject.GetComponent<Hiding>();
-                isHiding = hiding.GetHiding();
-                if (!isHiding)
-                {
-                    isAttacking = true;
-                }
-                return;
+                isAttacking = true;
+                currentTarget = target.transform;
             }
-        }
-
-        // Calculate circular movement around the original position if no target is found
-        float angle = (Time.time * patrolSpeed + startingAngle) % 360f;
-        float x = Mathf.Cos(Mathf.Deg2Rad * angle) * patrolRadius;
-        float y = Mathf.Sin(Mathf.Deg2Rad * angle) * patrolRadius;
-
-        // Set the new position without changing the rotation
-        transform.position = originalPosition + new Vector2(x, y);
-    }
-
-
-    void Attack()
-    {
-        // Move towards the target object with attack speed
-        if (targetObject != null)
-        {
-            if (isHiding)
-            {
-                // Player or duck is hiding in the bush, continue patrolling
-                StopAttack();
-            }
-            else
-            {
-                Vector2 direction = (targetObject.transform.position - transform.position).normalized;
-
-                // Move towards the target object with attack speed
-                transform.Translate(direction * attackSpeed * Time.deltaTime);
-
-                // Check if the enemy is close to the target object to stop attacking
-                if (Vector2.Distance(transform.position, targetObject.transform.position) < attackRange)
-                {
-                    Destroy(targetObject);
-                    StopAttack();
-                }
-            }
-        }
-        else
-        {
-            // If the target object is null (destroyed or no longer visible), stop attacking
-            StopAttack();
         }
     }
 
-    void StopAttack()
+    void AttackTarget()
     {
-        // Transition from attacking to patrolling
+        if (currentTarget != null && !onCooldown)
+        {
+            // Calculate the direction towards the target
+            Vector2 direction = (currentTarget.position - transform.position).normalized;
+
+            // Move the Hawk towards the target
+            transform.position += new Vector3(direction.x, direction.y, 0) * attackSpeed * Time.deltaTime;
+        }
+    }
+
+    IEnumerator StartCountdown()
+    {
+        float timer = attackCooldown;
+
+        while (timer > 0)
+        {
+            // Decrease the timer by deltaTime
+            timer -= Time.deltaTime;
+
+            // Wait for the next frame
+            yield return null;
+        }
+        onCooldown = false;
+        currentTarget = null;
         isAttacking = false;
-        isPatrolling = true;
-        targetObject = null;
-
-        // Start a cooldown before resuming patrolling
-        StartAttackCooldown();
     }
 
-    void StartAttackCooldown()
+    IEnumerator ReturnToPath()
     {
-        if (!isOnCooldown)
+        Vector2 targetPosition = GetNextPosition();
+
+        while (Vector2.Distance(new Vector2(transform.position.x, transform.position.y), targetPosition) > 0.1f)
         {
-            // Start cooldown only if not already on cooldown
-            isOnCooldown = true;
-            cooldownCoroutine = StartCoroutine(AttackCooldown());
-        }
-    }
-
-    IEnumerator AttackCooldown()
-    {
-        // Store the initial position
-        Vector2 initialPosition = transform.position;
-
-        // Wait for the cooldown duration
-        yield return new WaitForSeconds(attackCooldown);
-
-        // Allow attacking again after the cooldown
-        isOnCooldown = false;
-
-        // If the hawk has moved away during the cooldown, smoothly move back to the initial position
-        float startTime = Time.time;
-        float elapsedTime = 0f;
-        float journeyLength = Vector2.Distance(transform.position, initialPosition);
-
-        while (elapsedTime < 1.0f) // Smooth return over 1 second (adjust as needed)
-        {
-            elapsedTime = (Time.time - startTime) / attackCooldown;
-            float fractionOfJourney = elapsedTime;
-            transform.position = Vector2.Lerp(transform.position, initialPosition, fractionOfJourney);
+            transform.position = Vector2.MoveTowards(new Vector2(transform.position.x, transform.position.y), targetPosition, attackSpeed * Time.deltaTime);
             yield return null;
         }
 
-        // Ensure exact position at the end of the lerp
-        transform.position = initialPosition;
+        // Reset coroutine reference
+        returnToPatrolCoroutine = null;
 
-        // Resume patrolling
+        // Reset patrolling
         isPatrolling = true;
+        isAttacking = false;
     }
 
-    /*IEnumerator AttackCooldown()
+    Vector2 GetNextPosition()
     {
-        // Store the initial position
-        Vector2 initialPosition = transform.position;
-
-        // Wait for the cooldown duration
-        yield return new WaitForSeconds(attackCooldown);
-
-        // Allow attacking again after the cooldown
-        isOnCooldown = false;
-
-        // Calculate the distance to the initial position
-        float distanceToInitial = Vector2.Distance(transform.position, initialPosition);
-
-        // If the hawk has moved away during the cooldown, smoothly move back to the initial position
-        if (distanceToInitial > 0.1f)
-        {
-            float startTime = Time.time;
-            float journeyLength = distanceToInitial;
-
-            while (Time.time < startTime + 1.0f) // 1.0f is the duration for the smooth return
-            {
-                float distCovered = (Time.time - startTime) * patrolSpeed;
-                float fractionOfJourney = distCovered / journeyLength;
-                transform.position = Vector2.Lerp(transform.position, initialPosition, fractionOfJourney);
-                yield return null;
-            }
-
-            // Ensure exact position at the end of the lerp
-            transform.position = initialPosition;
-        }
-
-        // Resume patrolling
-        isPatrolling = true;
-    }*/
+        float x = spawnPoint.x + Mathf.Cos(currentAngle) * patrolRadius;
+        float y = spawnPoint.y + Mathf.Sin(currentAngle) * patrolRadius;
+        return new Vector2(x, y);
+    }
 }

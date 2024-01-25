@@ -57,7 +57,6 @@ public class DuckAnimation : MonoBehaviour
 
             anim.enabled = true;
 
-            Debug.Log(anim.enabled);
             anim.SetTrigger("Underwater");
         }
 

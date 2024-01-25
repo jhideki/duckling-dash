@@ -14,6 +14,7 @@ public class Map
     public HashSet<Vector2Int> corridorPositions;
     public List<Vector2Int> hawkPositions;
     public List<Vector2Int> bushPositions;
+    public List<Vector2Int> hunterPositions;
     public Spawner spawner;
     public DrawBackground background;
     public TileMapVisualizer tileMapVisualizer;
@@ -168,6 +169,43 @@ public class Map
     public void SetBushPositions(List<Vector2Int> bushPositions)
     {
         this.bushPositions = bushPositions;
+    }
+    public List<Vector2Int> SetHunterPositions(int numHunters)
+    {
+        hunterPositions = new List<Vector2Int>();
+        List<Vector2Int> islandList = new List<Vector2Int>(islandPositions);
+
+        for (int i = 0; i < numHunters; i++)
+        {
+            // Find a unique position for the hunter
+            Vector2Int randomPosition;
+            int count = 0;
+            do
+            {
+                int randomIndex = Random.Range(0, islandList.Count);
+                randomPosition = islandList[randomIndex];
+                count++;
+            } while (count < 1000 && (hunterPositions.Contains(randomPosition) || IsPositionOccupied(randomPosition)));
+
+            // Add the hunter to the unique position
+            hunterPositions.Add(randomPosition);
+        }
+
+        return hunterPositions;
+    }
+
+    // Check if the given position is already occupied by another hunter
+    private bool IsPositionOccupied(Vector2Int position)
+    {
+        foreach (Vector2Int hunterPosition in hunterPositions)
+        {
+            // Assuming a 5x5 grid, adjust the condition accordingly
+            if (Mathf.Abs(position.x - hunterPosition.x) < 5 && Mathf.Abs(position.y - hunterPosition.y) < 5)
+            {
+                return true; // Position is occupied
+            }
+        }
+        return false; // Position is not occupied
     }
 
 
