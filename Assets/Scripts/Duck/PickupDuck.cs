@@ -51,7 +51,7 @@ public class PickupDuck : MonoBehaviour
 
     public void ChangeLast()
     {
-        if(lastDuck = null)
+        if(lastDuck == null)
         {
 
         }
@@ -63,19 +63,36 @@ public class PickupDuck : MonoBehaviour
             {
                 FollowParent followScript = currentDuck.GetComponent<FollowParent>();
 
-                if (followScript != null && followScript.GetNextDuck() != null)
+                if (followScript != null)
                 {
-                    currentDuck = followScript.GetNextDuck().gameObject;
+                    FollowParent nextDuck = followScript.GetNextDuck();
+
+                    if (nextDuck != null)
+                    {
+                        currentDuck = nextDuck.gameObject;
+                    }
+                    else
+                    {
+                        // Handle the case where nextDuck is null
+                        Debug.LogError("Next Duck is null. Handle this case appropriately.");
+                        break;  // Break out of the loop or add other logic as needed
+                    }
                 }
                 else
                 {
-                    // Found the last duck in the chain
-                    lastDuck = followScript;
-                    break;
+                    // Handle the case where followScript is null
+                    Debug.LogError("FollowParent script is null. Handle this case appropriately.");
+                    break;  // Break out of the loop or add other logic as needed
                 }
             }
         }
     }
-    
+
+    public FollowParent GetLastDuck()
+    {
+        ChangeLast();
+        return lastDuck;
+    }
+
 
 }
