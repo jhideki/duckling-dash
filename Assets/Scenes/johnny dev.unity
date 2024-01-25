@@ -467,16 +467,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8806868813099816254, guid: 1db187a43d2bf3247a9ef0d36fe394d8, type: 3}
-      propertyPath: maxBushes
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8806868813099816254, guid: 1db187a43d2bf3247a9ef0d36fe394d8, type: 3}
-      propertyPath: minBushes
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8806868813099816254, guid: 1db187a43d2bf3247a9ef0d36fe394d8, type: 3}
-      propertyPath: mapPartitions
-      value: 3
+      propertyPath: numWaterObjects
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

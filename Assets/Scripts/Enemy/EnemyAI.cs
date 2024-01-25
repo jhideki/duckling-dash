@@ -7,10 +7,10 @@ public class EnemyAI : MonoBehaviour
 {
     public float patrolSpeed = 2f;
     public float patrolRadius = 10f;
-    public float visionRange = 3f;
+    public float visionRange = 2f;
     public float attackRange = 0.5f;
     public float attackCooldown = 5f;
-    public float attackSpeed = 7f;
+    public float attackSpeed = 3f;
 
     private float lastAttackTime;
 

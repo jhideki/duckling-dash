@@ -10,10 +10,12 @@ public abstract class AbstractGenerator : MonoBehaviour
     [SerializeField] public GameObject backgroundPrefab;
     [SerializeField] public GameObject bushPrefab;
     [SerializeField] public GameObject duckPrefab;
+    [SerializeField] public GameObject hunterPrefab;
     [SerializeField] public int mapPartitions;
     [SerializeField] public int minBushes = 10;
     [SerializeField] public int maxBushes = 15;
-    [SerializeField] public int numDucklings = 10;
+    [SerializeField] public int numHunters = 3;
+    [SerializeField] public int numWaterObjects = 10;
     public WallGenerator wallGenerator;
 
     protected DrawBackground background;
@@ -45,6 +47,7 @@ public abstract class AbstractGenerator : MonoBehaviour
         yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.wallPositions));
 
         yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.islandPositions));
+        yield return StartCoroutine(tileMapVisualizer.PaintFoliageTiles(map.wallPositions));
 
         tileMapVisualizer.ClearWallTiles(map.corridorPositions);
 
@@ -60,6 +63,11 @@ public abstract class AbstractGenerator : MonoBehaviour
         yield return StartCoroutine(map.spawner.SpawnObjects(hawkPositions, hawkPrefab));
         yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, bushPrefab));
         yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, duckPrefab));
+
+        yield return StartCoroutine(tileMapVisualizer.PaintWaterObjects(map, numWaterObjects));
+        //get hunter positions
+        List<Vector2Int> hunterPositions = map.SetHunterPositions(numHunters);
+        yield return StartCoroutine(map.spawner.SpawnObjects(hunterPositions, hunterPrefab));
     }
 
     public IEnumerator DrawMapObjects(Map map, Map map2)
@@ -72,6 +80,7 @@ public abstract class AbstractGenerator : MonoBehaviour
 
         yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.islandPositions));
 
+        yield return StartCoroutine(tileMapVisualizer.PaintFoliageTiles(map.wallPositions));
         tileMapVisualizer.ClearWallTiles(map.corridorPositions);
 
         tileMapVisualizer.ClearWallTiles(map2.corridorPositions);
@@ -85,11 +94,18 @@ public abstract class AbstractGenerator : MonoBehaviour
 
         //get bush positions
         List<Vector2Int> bushPositions = ProceduralGenerationAlgorithms.SetBushPositionsModified(numBushes, map.floorPositions, map.wallPositions, map.islandPositions);
+        map.SetBushPositions(bushPositions);
 
         //Spawn hawks
         yield return StartCoroutine(map.spawner.SpawnObjects(hawkPositions, hawkPrefab));
         yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, bushPrefab));
         yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, duckPrefab));
+
+        yield return StartCoroutine(tileMapVisualizer.PaintWaterObjects(map, numWaterObjects));
+        //get hunter positions
+        List<Vector2Int> hunterPositions = map.SetHunterPositions(numHunters);
+        yield return StartCoroutine(map.spawner.SpawnObjects(hunterPositions, hunterPrefab));
+
     }
 
     public IEnumerator FillCorridor(Map map)
