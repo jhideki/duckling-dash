@@ -8,4 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/basic mechs.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Intro.unity
+    guid: e25fc7355820f984aaa29acc1da5bc49
+  - enabled: 1
+    path: Assets/Scenes/Noah pt2.unity
+    guid: cee347450b15ca742853909e8e611455
+  - enabled: 1
+    path: Assets/Scenes/johnny dev.unity
+    guid: 9deec98ceeba42542a9c04a25a1d62a1
+  - enabled: 1
+    path: Assets/Scenes/End.unity
+    guid: 58d2a62625ad3c549bdd794e8d9fa1bf
   m_configObjects: {}

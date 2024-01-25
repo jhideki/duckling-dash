@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerDown : MonoBehaviour
 {
@@ -53,6 +54,7 @@ public class PlayerDown : MonoBehaviour
         {
             // Destroy the player
             Destroy(gameObject);
+            LoadGameOverScene();
         }
 
         // Call the UpdateLastDuck function in the PickupDuck script
@@ -61,6 +63,12 @@ public class PlayerDown : MonoBehaviour
         {
             pickupDuckScript.ChangeLast();
         }
+    }
+
+    void LoadGameOverScene()
+    {
+        // You need to replace "YourGameOverSceneName" with the actual name or index of your game over scene
+        SceneManager.LoadScene("Intro");
     }
 
 }
