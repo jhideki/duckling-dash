@@ -23,16 +23,58 @@ public class DuckAnimation : MonoBehaviour
 
     private Vector3 lastPosition;
     private Vector3 direction;
+
+    //Underwater variables
+    private bool playingAnimation;
+    public float animationBuffer = 2.0f;
+    private float appearStartTime;
+    public bool isTimingAppear;
+    private Animator anim;
+    private Hiding hiding;
+    private FollowParent followParent;
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         selectedSprites = eSprites;
+        hiding = GetComponent<Hiding>();
+        anim = GetComponent<Animator>();
+        followParent = GetComponent<FollowParent>();
+
+        //Underwater variables
+        anim.enabled = false;
+        playingAnimation = false;
+        isTimingAppear = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (hiding.GetHiding() && !playingAnimation && hiding.GetUnderWater() && followParent.isFollowing)
+        {
+            playingAnimation = true;
+
+            anim.enabled = true;
+
+            Debug.Log(anim.enabled);
+            anim.SetTrigger("Underwater");
+        }
+
+        if (!hiding.GetHiding() && playingAnimation && !isTimingAppear)
+        {
+            anim.SetTrigger("Appear");
+            appearStartTime = Time.time;
+            isTimingAppear = true;
+        }
+
+        if ((Time.time - appearStartTime) > animationBuffer && playingAnimation && !hiding.GetHiding())
+        {
+            anim.enabled = false;
+            playingAnimation = false;
+            isTimingAppear = false;
+        }
+
         if (!spriteRenderer.flipX && changeX < 0f)
         {
             spriteRenderer.flipX = true;
