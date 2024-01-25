@@ -61,7 +61,7 @@ public class Bush : MonoBehaviour
         float duration = 0.5f; // You can adjust the fade duration
         float elapsedTime = 0f;
 
-        while (elapsedTime < duration)
+        while (elapsedTime < duration && player != null)
         {
             playerRenderer.color = Color.Lerp(currentColor, targetColor, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
