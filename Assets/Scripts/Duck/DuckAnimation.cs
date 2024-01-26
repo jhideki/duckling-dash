@@ -116,6 +116,7 @@ public class DuckAnimation : MonoBehaviour
         spriteRenderer.sprite = selectedSprites[frame];
     }
 
+
     void FixedUpdate()
     {
 

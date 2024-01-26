@@ -304,10 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4dd5e01061cc548add5249e8f94865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  rotationSpeed: 1
+  moveSpeed: 2.5
   detectionRadius: 3
-  attackDuration: 2
-  resumeRotationDelay: 2
-  boxSize: 2
+  boxSize: 3
   patrolDuration: 1

@@ -17,22 +17,30 @@ public class HawkAttk : MonoBehaviour
     public float boxSize = 2.0f; // Default box size
     private float patrolTimer = 0.0f;
     public float patrolDuration = 1.0f; // Minimum time to patrol in one direction
+    private KillPlayer killPlayer;
+    private Transform player;
+    private bool canAttack;
 
     private void Start()
     {
-
         spawnPoint = transform.position;
         duckcounter = GameObject.Find("DuckCounter").GetComponent<DuckCounter>();
         randomTarget = GetRandomPositionInBox();
+        killPlayer = GameObject.Find("Player").GetComponent<KillPlayer>();
+        player = GameObject.Find("Player").GetComponent<Transform>();
+        canAttack = true;
+
+
     }
 
     private void Update()
     {
 
-        if (DetectPlayer() && (!hiding.GetHiding()))
+        if (DetectPlayer() && (!hiding.GetHiding()) && canAttack)
         {
             if (duckcounter.GetNumDucks() > 0)
             {
+                Debug.Log("attacking duck");
                 AttackDuck();
             }
             else
@@ -113,24 +121,28 @@ public class HawkAttk : MonoBehaviour
             if (GetComponent<Collider2D>().OverlapPoint(player.transform.position))
             {
                 // Destroy the player
-                Destroy(player);
-                PlayerDown playerDown = player.GetComponent<PlayerDown>();
-                playerDown.LoadGameOverScene();
+                killPlayer.Die();
             }
         }
+    }
+
+    IEnumerator AttackCooldown()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(2.0f);
+        canAttack = true;
     }
 
 
     private void AttackDuck()
     {
-        // Your attack logic for the Duck here
-        Debug.Log("Duck detected! Attack!");
 
         // Check if the target GameObject is not null
         if (target != null)
         {
+            Debug.Log("this doesn't run");
             // Try to get the PickupDuck component on the target
-            PickupDuck pickupDuck = target.gameObject.GetComponent<PickupDuck>();
+            PickupDuck pickupDuck = player.GetComponent<PickupDuck>();
 
             // Check if the PickupDuck component is not null
             if (pickupDuck != null)
@@ -138,13 +150,20 @@ public class HawkAttk : MonoBehaviour
                 // Try to get the FollowParent component from the PickupDuck
                 FollowParent followParent = pickupDuck.lastDuck;
 
+                KillDuckling killDuckling = followParent.GetComponent<KillDuckling>();
+                Transform duckling = followParent.GetComponent<Transform>();
+
+                transform.position = Vector2.MoveTowards(transform.position, duckling.transform.position, moveSpeed * Time.deltaTime);
                 // Check if the FollowParent component is not null
                 if (followParent != null)
                 {
+                    if (GetComponent<Collider2D>().OverlapPoint(duckling.transform.position))
+                    {
+                        followParent.StopFollowing();
+                        killDuckling.Die();
+                        StartCoroutine(AttackCooldown());
+                    }
                     // Stop following and destroy the duck GameObject
-                    followParent.StopFollowing();
-                    Destroy(followParent.gameObject);
-
                 }
                 else
                 {

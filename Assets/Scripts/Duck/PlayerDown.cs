@@ -7,6 +7,7 @@ public class PlayerDown : MonoBehaviour
 {
     // Cooldown time in seconds
     public float hitCooldown = 1.0f;
+    private Animator animator;
 
     // Time of the last hit
     private float lastHitTime = 0.0f;
@@ -16,6 +17,7 @@ public class PlayerDown : MonoBehaviour
     {
 
         duckCounter = GameObject.Find("DuckCounter").GetComponent<DuckCounter>();
+        animator = GetComponent<Animator>();
     }
 
     // OnTriggerEnter2D is called when a 2D collider enters a trigger collider
@@ -57,8 +59,8 @@ public class PlayerDown : MonoBehaviour
         if (duckCounter.GetNumDucks() == 0)
         {
             // Destroy the player
-            Destroy(gameObject);
-            LoadGameOverScene();
+            KillPlayer killPlayer = GetComponent<KillPlayer>();
+            killPlayer.Die();
         }
 
         // Call the UpdateLastDuck function in the PickupDuck script
@@ -72,10 +74,10 @@ public class PlayerDown : MonoBehaviour
     public void LoadGameOverScene()
     {
 
+
         DuckCounter duckCounter = GameObject.Find("DuckCounter").GetComponent<DuckCounter>();
         score.intValue = duckCounter.GetScore();
 
-        // You need to replace "YourGameOverSceneName" with the actual name or index of your game over scene
         SceneManager.LoadScene("Intro");
     }
 

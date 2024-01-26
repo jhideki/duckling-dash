@@ -26,7 +26,8 @@ public class DuckDown : MonoBehaviour
             hitDuck.StopFollowing();
 
             // Destroy the hit duck
-            Destroy(hitDuck.gameObject);
+            KillDuckling killDuckling = GetComponent<KillDuckling>();
+            killDuckling.Die();
         }
 
         // Destroy the bullet

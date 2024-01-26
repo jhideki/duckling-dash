@@ -641,6 +641,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 112483981737465733, guid: a47eb0e5404472746b71348a9d8dcae4, type: 3}
+      propertyPath: m_Volume
+      value: 0.967
+      objectReference: {fileID: 0}
     - target: {fileID: 3654715482140681584, guid: a47eb0e5404472746b71348a9d8dcae4, type: 3}
       propertyPath: m_Name
       value: Player
@@ -788,20 +792,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 863187599060362455, guid: e16d0f4cb156aaa4db350c556e16a6b2, type: 3}
-      propertyPath: boxSize
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 863187599060362455, guid: e16d0f4cb156aaa4db350c556e16a6b2, type: 3}
-      propertyPath: moveSpeed
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 863187599060362455, guid: e16d0f4cb156aaa4db350c556e16a6b2, type: 3}
       propertyPath: detectionRadius
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2618719206367619536, guid: e16d0f4cb156aaa4db350c556e16a6b2, type: 3}
-      propertyPath: m_Enabled
-      value: 0
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3092866781945761445, guid: e16d0f4cb156aaa4db350c556e16a6b2, type: 3}
       propertyPath: m_LocalPosition.x
