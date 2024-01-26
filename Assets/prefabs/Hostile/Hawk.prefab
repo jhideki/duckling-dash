@@ -126,7 +126,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3909654939896017668}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -304,10 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4dd5e01061cc548add5249e8f94865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  rotationSpeed: 1
+  moveSpeed: 2.5
   detectionRadius: 3
-  attackDuration: 2
-  resumeRotationDelay: 2
-  boxSize: 2
+  boxSize: 3
   patrolDuration: 1

@@ -54,7 +54,7 @@ public class PlayerDown : MonoBehaviour
         }
 
         // Check if the player has no ducks following
-        if (duckCounter.GetNumDucks() == 0)
+        if (followingCount == 0)
         {
             // Destroy the player
             Destroy(gameObject);
