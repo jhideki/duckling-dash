@@ -16,6 +16,7 @@ public abstract class AbstractGenerator : MonoBehaviour
     [SerializeField] public int maxBushes = 15;
     [SerializeField] public int numHunters = 3;
     [SerializeField] public int numWaterObjects = 10;
+    public bool isLoading;
     public WallGenerator wallGenerator;
 
     protected DrawBackground background;
@@ -32,12 +33,12 @@ public abstract class AbstractGenerator : MonoBehaviour
 
         Map map = new Map(tileMapVisualizer, spawner, background);
 
-
         return map;
     }
 
     public IEnumerator DrawMapObjects(Map map)
     {
+        isLoading = true;
         //Partition map should occur after map is shifted
         map.SetPartitions(mapPartitions);
 
@@ -68,6 +69,7 @@ public abstract class AbstractGenerator : MonoBehaviour
         //get hunter positions
         List<Vector2Int> hunterPositions = map.SetHunterPositions(numHunters);
         yield return StartCoroutine(map.spawner.SpawnObjects(hunterPositions, hunterPrefab));
+        isLoading = false;
     }
 
     public IEnumerator DrawMapObjects(Map map, Map map2)
