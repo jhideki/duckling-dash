@@ -50,7 +50,9 @@ public class PickupDuck : MonoBehaviour
     {
         if (lastDuck == null)
         {
-
+            // Handle the case where lastDuck is null
+            Debug.Log("Last Duck is null. Handle this case appropriately.");
+            return;
         }
         else
         {

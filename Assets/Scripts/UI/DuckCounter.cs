@@ -17,8 +17,8 @@ public class DuckCounter : MonoBehaviour
     }
     void Update()
     {
-        Debug.Log("num ducks" + numDucks);
-        Debug.Log("num score" + score);
+        //Debug.Log("num ducks" + numDucks);
+        //Debug.Log("num score" + score);
     }
 
     public int GetNumDucks()

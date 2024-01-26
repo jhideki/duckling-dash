@@ -69,7 +69,7 @@ public class PlayerDown : MonoBehaviour
         }
     }
 
-    void LoadGameOverScene()
+    public void LoadGameOverScene()
     {
 
         DuckCounter duckCounter = GameObject.Find("DuckCounter").GetComponent<DuckCounter>();
