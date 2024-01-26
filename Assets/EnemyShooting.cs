@@ -11,6 +11,8 @@ public class EnemyShooting : MonoBehaviour
 
     private float timer;
     private Hiding hiding;
+
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -35,8 +37,17 @@ public class EnemyShooting : MonoBehaviour
                 if (timer > 2)
                 {
                     timer = 0;
-                    if (closestTarget && followParent.isFollowing)
+
+                    if(closestTarget.CompareTag("Player"))
+                    {
                         shoot(closestTarget);
+                    }
+                    
+                    else if (closestTarget && followParent.isFollowing)
+                    {
+                        shoot(closestTarget);
+                    }
+                    
                 }
             }
         }

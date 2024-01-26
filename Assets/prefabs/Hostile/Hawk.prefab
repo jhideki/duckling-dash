@@ -199,9 +199,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0014858246, y: -0.0011456013}
+  m_Offset: {x: -0.0014858246, y: 0.021061063}
   serializedVersion: 2
-  m_Radius: 0.38420653
+  m_Radius: 0.9794017
 --- !u!114 &8550303159176326271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +251,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.97427464
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -355,3 +355,5 @@ MonoBehaviour:
   moveSpeed: 1
   rotationSpeed: 1
   detectionRadius: 5
+  attackDuration: 2
+  resumeRotationDelay: 2
