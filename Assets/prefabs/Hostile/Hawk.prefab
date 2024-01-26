@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8550303159176326271}
   - component: {fileID: -1896483466022375611}
   - component: {fileID: 4435177532017522725}
+  - component: {fileID: 863187599060362455}
   m_Layer: 10
   m_Name: Hawk
   m_TagString: Hawk
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1532896867
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -2008026150, guid: 0f193882edabeb848889a79c10e46f56, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -98,7 +99,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3909654939896017668}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb03cfe46c62a574ab1e704e2d5c3782, type: 3}
   m_Name: 
@@ -106,8 +107,10 @@ MonoBehaviour:
   patrolSpeed: 0.6
   patrolRadius: 7
   visionRange: 3
+  attackCooldown: 5
+  currentCooldown: 0
   attackSpeed: 5.5
-  bush: {fileID: 0}
+  distance: 0.1
 --- !u!114 &-419336311019732553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,3 +340,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 10
+--- !u!114 &863187599060362455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3909654939896017668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4dd5e01061cc548add5249e8f94865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 1
+  rotationSpeed: 1
+  detectionRadius: 5
