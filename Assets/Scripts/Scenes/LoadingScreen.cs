@@ -9,8 +9,10 @@ public class LoadingScreen : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public float fadeDuration = 2f;
     private Transform loading;
+    public GameObject canvasGroup;
     void Start()
     {
+        canvasGroup.SetActive(false);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         loading = transform.GetChild(0);
@@ -49,6 +51,7 @@ public class LoadingScreen : MonoBehaviour
 
         // Make sure the sprite is completely transparent at the end
         spriteRenderer.color = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
+        canvasGroup.SetActive(true);
 
         Destroy(gameObject);
 
