@@ -542,6 +542,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -151.9
       objectReference: {fileID: 0}
+    - target: {fileID: 1327912575479772555, guid: eec7cb3021e93b046b98bf950ed1d035, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1827731793059666825, guid: eec7cb3021e93b046b98bf950ed1d035, type: 3}
       propertyPath: m_Name
       value: StartCanvas

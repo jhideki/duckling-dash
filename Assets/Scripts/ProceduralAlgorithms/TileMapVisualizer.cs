@@ -109,7 +109,7 @@ public class TileMapVisualizer : MonoBehaviour
         {
             PaintSingleTile(wallTilemap, wallTop, position);
             numElements++;
-            if (numElements % 2 == 0)
+            if (numElements % 10 == 0)
             {
                 yield return null;
             }
