@@ -85,6 +85,8 @@ public class PickupDuck : MonoBehaviour
                     break;  // Break out of the loop or add other logic as needed
                 }
             }
+
+            lastDuck = currentDuck.GetComponent<FollowParent>();
         }
     }
 

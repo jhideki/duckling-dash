@@ -11,6 +11,9 @@ public class SpaceUI : MonoBehaviour
 
     public float fillDuration = 3.5f; // Adjust this value for the total duration of the fill effect
 
+    private Coroutine fillCoroutine; // Coroutine reference
+    private bool fillingInProgress = false; // Flag to track if filling is in progress
+
     private void Start()
     {
         // Get the Image component from the button
@@ -24,13 +27,22 @@ public class SpaceUI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // Start fill effect coroutine
-            StartCoroutine(FillButton());
+            if (fillingInProgress)
+            {
+                ResetColor(); // Reset color immediately
+            }
+            else
+            {
+                // Start a new fill coroutine only if not already filling
+                fillCoroutine = StartCoroutine(FillButton());
+            }
         }
     }
 
     private IEnumerator FillButton()
     {
+        fillingInProgress = true; // Set flag to indicate filling is in progress
+
         float elapsedTime = 0f;
         Color startColor = pressedColor;
         Color targetColor = normalColor;
@@ -52,5 +64,13 @@ public class SpaceUI : MonoBehaviour
 
         // Ensure the final color is exactly the target color
         buttonImage.color = targetColor;
+
+        fillingInProgress = false; // Reset the flag after filling is complete
+    }
+
+    // Separate function to reset the color to the original color
+    private void ResetColor()
+    {
+        buttonImage.color = normalColor;
     }
 }

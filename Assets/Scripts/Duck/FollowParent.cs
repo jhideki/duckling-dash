@@ -88,15 +88,17 @@ public class FollowParent : MonoBehaviour
 
     public void StopFollowing()
     {
-        Debug.Log("GAYYYYYYYYYYYYYYYYYYYYYYYYY");
+        Debug.Log("STOP FOLLOWING ME");
         isFollowing = false;
         target = null;
 
+        
         // Disconnect from the previous duck
         if (previousDuck != null)
         {
-            previousDuck.SetNextDuck(null);
+            previousDuck.nextDuck = null;
         }
+        
 
         previousDuck = null;
         

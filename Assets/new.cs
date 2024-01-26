@@ -20,20 +20,21 @@ public class StashDuck : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Debug.Log("OnTriggerEnter called!");
-        Debug.Log("COUNT" + Count);
+        //Debug.Log("COUNT" + Count);
 
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player entered the trigger!");
+            //Debug.Log("Player entered the trigger!");
 
             if(Count >= numCollider)
             {
                 MultiCollide(other.gameObject);
                 Isreset = true;
             }
+
+            Count++;
         }
 
-        Count++;
         if (Isreset)
         {
             Count = 1;
@@ -49,15 +50,23 @@ public class StashDuck : MonoBehaviour
         pickupDuck = playr.GetComponent<PickupDuck>();
         followParent = playr.GetComponent<FollowParent>();
 
-        if (pickupDuck != null && followParent != null)
+        if (pickupDuck != null)
         {
-            // Call a method in PickupDuck to update the last duck reference
-            FollowParent lastDuck = pickupDuck.GetLastDuck();
-            Debug.Log("Last Duck: " + (lastDuck != null ? lastDuck.name : "null"));
+            if (followParent != null)
+            {
 
-            // Debug statement to check if FreeAndDeleteAllDucks is called
-            Debug.Log("Calling FreeAndDeleteAllDucks");
-            followParent.FreeAndDeleteAllDucks(lastDuck);
+                // Call a method in PickupDuck to update the last duck reference
+                FollowParent lastDuck = pickupDuck.GetLastDuck();
+                Debug.Log("Last Duck: " + (lastDuck != null ? lastDuck.name : "null"));
+
+                // Debug statement to check if FreeAndDeleteAllDucks is called
+                Debug.Log("Calling FreeAndDeleteAllDucks");
+                followParent.FreeAndDeleteAllDucks(lastDuck);
+            }
+            else
+            {
+
+            }
         }
         else
         {
