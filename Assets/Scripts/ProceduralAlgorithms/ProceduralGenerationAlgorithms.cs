@@ -58,6 +58,59 @@ public static class ProceduralGenerationAlgorithms
         return bushPositions;
     }
 
+    public static List<Vector2Int> SetNestPositions(int nestCount, Map map)
+    {
+
+        List<Vector2Int> nestPositions = new List<Vector2Int>();
+        HashSet<Vector2Int> nestTracker = new HashSet<Vector2Int>();
+        List<Vector2Int> floorPositionsTemp = new List<Vector2Int>(map.floorPositions);
+
+        HashSet<Vector2Int> bushPositions = new HashSet<Vector2Int>(map.bushPositions);
+        int attempts = 0;
+        int maxAttempts = 100; // Adjust this as needed
+
+        while (nestPositions.Count < nestCount && attempts < maxAttempts)
+        {
+            Vector2Int randomFloorPosition = floorPositionsTemp[Random.Range(0, floorPositionsTemp.Count)];
+
+            // Check if the 4x4 area is unoccupied by bushes, walls, and islands
+            if (IsAreaFree(randomFloorPosition, bushPositions, nestTracker, map.wallPositions, map.islandPositions))
+            {
+                // Add the 4x4 area to the list of occupied positions
+                AddOccupiedArea(randomFloorPosition, nestTracker);
+
+                // Add the bottom-left corner of the 4x4 area as the bush position
+                nestPositions.Add(randomFloorPosition);
+
+                // Remove the occupied positions from the temporary floor positions
+                RemoveOccupiedArea(floorPositionsTemp, randomFloorPosition);
+            }
+
+            attempts++;
+        }
+
+        return nestPositions;
+
+    }
+
+    private static bool IsAreaFree(Vector2Int bottomLeftCorner, HashSet<Vector2Int> bushPositions, HashSet<Vector2Int> bushTracker, HashSet<Vector2Int> wallPositions, HashSet<Vector2Int> islandPositions)
+    {
+        // Check if the 4x4 area is unoccupied by bushes, walls, and islands
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                Vector2Int position = bottomLeftCorner + new Vector2Int(i, j);
+
+                if (bushTracker.Contains(position) || wallPositions.Contains(position) || islandPositions.Contains(position) || bushPositions.Contains(position))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
     private static bool IsAreaFree(Vector2Int bottomLeftCorner, HashSet<Vector2Int> bushTracker, HashSet<Vector2Int> wallPositions, HashSet<Vector2Int> islandPositions)
     {
         // Check if the 4x4 area is unoccupied by bushes, walls, and islands

@@ -12,6 +12,7 @@ public class Map
     public HashSet<Vector2Int> islandPositions;
     public HashSet<Vector2Int> wallPositions;
     public HashSet<Vector2Int> corridorPositions;
+    public HashSet<Vector2Int> foliagePositions;
     public List<Vector2Int> hawkPositions;
     public List<Vector2Int> bushPositions;
     public List<Vector2Int> hunterPositions;
@@ -25,6 +26,7 @@ public class Map
         this.tileMapVisualizer = tileMapVisualizer;
         this.spawner = spawner;
         this.background = background;
+        this.foliagePositions = new HashSet<Vector2Int>();
     }
 
     public void SetFloorPositions(HashSet<Vector2Int> floorPositions)
@@ -213,6 +215,7 @@ public class Map
     {
         spawner.ClearObjects();
         background.clearBackground();
+        tileMapVisualizer.ClearFoliage(foliagePositions, this);
         //clear wall position refers to any grass block
         if (wallPositions != null && floorPositions != null)
         {
@@ -235,7 +238,6 @@ public class Map
             {
                 tileMapVisualizer.ClearWallTile(position);
             }
-
 
         }
         else

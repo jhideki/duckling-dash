@@ -37,7 +37,10 @@ public class DuckCounter : MonoBehaviour
     }
     public void DecrementDuckCount()
     {
-        numDucks--;
+        if (numDucks > 0)
+        {
+            numDucks--;
+        }
     }
     public void SetScore()
     {

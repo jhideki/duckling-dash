@@ -11,6 +11,12 @@ public class PlayerDown : MonoBehaviour
     // Time of the last hit
     private float lastHitTime = 0.0f;
     public Score score;
+    private DuckCounter duckCounter;
+    void Start()
+    {
+
+        duckCounter = GameObject.Find("DuckCounter").GetComponent<DuckCounter>();
+    }
 
     // OnTriggerEnter2D is called when a 2D collider enters a trigger collider
     void OnTriggerEnter2D(Collider2D other)
@@ -48,7 +54,7 @@ public class PlayerDown : MonoBehaviour
         }
 
         // Check if the player has no ducks following
-        if (followingCount == 0)
+        if (duckCounter.GetNumDucks() == 0)
         {
             // Destroy the player
             Destroy(gameObject);

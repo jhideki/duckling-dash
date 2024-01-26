@@ -23,6 +23,7 @@ public class DuckDown : MonoBehaviour
         {
             // Detach the followers from the hit duck
             DetachFollowers(hitDuck);
+            hitDuck.StopFollowing();
 
             // Destroy the hit duck
             Destroy(hitDuck.gameObject);

@@ -12,6 +12,7 @@ public class StashDuck : MonoBehaviour
     public int numCollider = 2;
     private int Count = 1;
     private bool Isreset = false;
+    public AudioSource audioSource;
 
     void Start()
     {
@@ -24,6 +25,10 @@ public class StashDuck : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            if (duckCounter.GetNumDucks() > 0)
+            {
+                audioSource.Play();
+            }
             MultiCollide(other.gameObject);
             duckCounter.SetScore();
         }
@@ -39,7 +44,7 @@ public class StashDuck : MonoBehaviour
         if (followParent != null)
         {
             followParent.FreeAndDeleteAllDucks(followParent.GetPreviousDuck());
-            Destroy(followParent.gameObject);
+            Destroy(followParent.transform.gameObject);
         }
 
     }

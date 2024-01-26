@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class TileMapVisualizer : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class TileMapVisualizer : MonoBehaviour
     {
         return floorTilemap.GetTile(position) != null;
     }
-    public IEnumerator PaintFoliageTiles(HashSet<Vector2Int> positions)
+    public IEnumerator PaintFoliageTiles(HashSet<Vector2Int> positions, Map map)
     {
         int count = 0;
         foreach (var position in positions)
@@ -33,14 +34,19 @@ public class TileMapVisualizer : MonoBehaviour
             if (random == 1 || random == 2)
             {
                 PaintSingleTile(foliageTilemap, foliageTile1, position);
+                map.foliagePositions.Add(position);
             }
             else if (random == 4 || random == 3)
             {
                 PaintSingleTile(foliageTilemap, foliageTile2, position);
+
+                map.foliagePositions.Add(position);
             }
             else if (random == 5)
             {
                 PaintSingleTile(foliageTilemap, folliageTile3, position);
+
+                map.foliagePositions.Add(position);
             }
 
             if (count % 10 == 0)
@@ -127,11 +133,24 @@ public class TileMapVisualizer : MonoBehaviour
         wallTilemap.SetTile(tilePosition, null);
     }
 
-    public void ClearWallTiles(HashSet<Vector2Int> positions)
+    public void ClearFoliage(HashSet<Vector2Int> foliagePositions, Map map)
+    {
+        HashSet<Vector2Int> positions = new HashSet<Vector2Int>(foliagePositions);
+        foreach (var position in positions)
+        {
+            var tilePosition = wallTilemap.WorldToCell((Vector3Int)position);
+            foliageTilemap.SetTile(tilePosition, null);
+            map.foliagePositions.Remove(position);
+        }
+
+    }
+
+    public void ClearWallTiles(HashSet<Vector2Int> positions, Map map)
     {
         foreach (var position in positions)
         {
             ClearWallTile(position);
+            map.wallPositions.Remove(position);
         }
     }
 

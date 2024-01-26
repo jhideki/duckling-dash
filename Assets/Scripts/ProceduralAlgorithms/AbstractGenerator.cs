@@ -11,11 +11,14 @@ public abstract class AbstractGenerator : MonoBehaviour
     [SerializeField] public GameObject bushPrefab;
     [SerializeField] public GameObject duckPrefab;
     [SerializeField] public GameObject hunterPrefab;
+
+    [SerializeField] public GameObject nestPrefab;
     [SerializeField] public int mapPartitions;
     [SerializeField] public int minBushes = 10;
     [SerializeField] public int maxBushes = 15;
     [SerializeField] public int numHunters = 3;
     [SerializeField] public int numWaterObjects = 10;
+    [SerializeField] public int numNests = 2;
     public bool isLoading;
     public WallGenerator wallGenerator;
 
@@ -48,9 +51,9 @@ public abstract class AbstractGenerator : MonoBehaviour
         yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.wallPositions));
 
         yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.islandPositions));
-        yield return StartCoroutine(tileMapVisualizer.PaintFoliageTiles(map.wallPositions));
+        yield return StartCoroutine(tileMapVisualizer.PaintFoliageTiles(map.wallPositions, map));
 
-        tileMapVisualizer.ClearWallTiles(map.corridorPositions);
+        tileMapVisualizer.ClearWallTiles(map.corridorPositions, map);
 
         //get hawk positions
         List<Vector2Int> hawkPositions = map.SetHawkPositions();
@@ -59,11 +62,14 @@ public abstract class AbstractGenerator : MonoBehaviour
 
         //get bush positions
         List<Vector2Int> bushPositions = ProceduralGenerationAlgorithms.SetBushPositionsModified(numBushes, map.floorPositions, map.wallPositions, map.islandPositions);
+        map.SetBushPositions(bushPositions);
+        List<Vector2Int> nestPositions = ProceduralGenerationAlgorithms.SetNestPositions(numNests, map);
 
         //Spawn hawks
         yield return StartCoroutine(map.spawner.SpawnObjects(hawkPositions, hawkPrefab));
         yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, bushPrefab));
         yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, duckPrefab));
+        yield return StartCoroutine(map.spawner.SpawnObjects(nestPositions, nestPrefab));
 
         yield return StartCoroutine(tileMapVisualizer.PaintWaterObjects(map, numWaterObjects));
         //get hunter positions
@@ -82,10 +88,14 @@ public abstract class AbstractGenerator : MonoBehaviour
 
         yield return StartCoroutine(tileMapVisualizer.PaintTilesAsync(map.islandPositions));
 
-        yield return StartCoroutine(tileMapVisualizer.PaintFoliageTiles(map.wallPositions));
-        tileMapVisualizer.ClearWallTiles(map.corridorPositions);
+        tileMapVisualizer.ClearWallTiles(map.corridorPositions, map2);
 
-        tileMapVisualizer.ClearWallTiles(map2.corridorPositions);
+        tileMapVisualizer.ClearWallTiles(map2.corridorPositions, map2);
+        tileMapVisualizer.ClearFoliage(map.corridorPositions, map);
+        tileMapVisualizer.ClearFoliage(map2.corridorPositions, map2);
+        tileMapVisualizer.ClearFoliage(map2.foliagePositions, map2);
+
+        yield return StartCoroutine(tileMapVisualizer.PaintFoliageTiles(map.wallPositions, map));
         //draw background
         map.background.drawBackground(backgroundPrefab, map.boundaries);
 
@@ -98,11 +108,13 @@ public abstract class AbstractGenerator : MonoBehaviour
         List<Vector2Int> bushPositions = ProceduralGenerationAlgorithms.SetBushPositionsModified(numBushes, map.floorPositions, map.wallPositions, map.islandPositions);
         map.SetBushPositions(bushPositions);
 
+        List<Vector2Int> nestPositions = ProceduralGenerationAlgorithms.SetNestPositions(numNests, map);
         //Spawn hawks
         yield return StartCoroutine(map.spawner.SpawnObjects(hawkPositions, hawkPrefab));
         yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, bushPrefab));
         yield return StartCoroutine(map.spawner.SpawnObjects(bushPositions, duckPrefab));
 
+        yield return StartCoroutine(map.spawner.SpawnObjects(nestPositions, nestPrefab));
         yield return StartCoroutine(tileMapVisualizer.PaintWaterObjects(map, numWaterObjects));
         //get hunter positions
         List<Vector2Int> hunterPositions = map.SetHunterPositions(numHunters);

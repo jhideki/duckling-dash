@@ -33,7 +33,22 @@ public class Spawner : MonoBehaviour
     {
         foreach (var obj in mapObjects)
         {
-            DestroyImmediate(obj);
+            bool canDestroy = true;
+            if (obj.CompareTag("Duck"))
+            {
+                FollowParent followParent = obj.GetComponent<FollowParent>();
+                if (followParent.isFollowing)
+                {
+                    canDestroy = false;
+                }
+
+            }
+
+            if (canDestroy)
+            {
+                DestroyImmediate(obj);
+            }
+
         }
         mapObjects.Clear();
         Destroy(this);
