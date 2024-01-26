@@ -56,7 +56,7 @@ public class DuckDown : MonoBehaviour
 
             if (currentDuck != null)
             {
-               // Debug.Log("Next Duck: " + currentDuck.name);
+                // Debug.Log("Next Duck: " + currentDuck.name);
             }
         }
     }

@@ -23,6 +23,8 @@ public class EnemyShooting : MonoBehaviour
         timer += Time.deltaTime;
 
         GameObject closestTarget = FindClosestTarget();
+
+        FollowParent followParent = closestTarget.GetComponent<FollowParent>();
         hiding = closestTarget.GetComponent<Hiding>();
         if (closestTarget != null && !hiding.GetHiding())
         {
@@ -33,7 +35,8 @@ public class EnemyShooting : MonoBehaviour
                 if (timer > 2)
                 {
                     timer = 0;
-                    shoot(closestTarget);
+                    if (closestTarget && followParent.isFollowing)
+                        shoot(closestTarget);
                 }
             }
         }

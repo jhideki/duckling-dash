@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PickupDuck : MonoBehaviour
 {
-    private FollowParent lastDuck;
+    public FollowParent lastDuck;
     // Start is called before the first frame update
 
     void Start()
@@ -20,7 +20,7 @@ public class PickupDuck : MonoBehaviour
         }
     }
 
-    
+
     private void GetDuck(GameObject duck)
     {
         FollowParent followScript = duck.GetComponent<FollowParent>();
@@ -38,10 +38,7 @@ public class PickupDuck : MonoBehaviour
             }
             followScript.SetPreviousDuck(lastDuck);
 
-             // Add debug statements to check the linked list
-            //Debug.Log("Current Duck: " + duck.name);
-            //Debug.Log("Previous Duck: " + (lastDuck != null ? lastDuck.name : "null"));
-           // Debug.Log("Next Duck: " + (followScript.GetNextDuck() != null ? followScript.GetNextDuck().name : "null"));
+            // Add debug statements to check the linked list
 
             lastDuck = followScript;
         }
@@ -51,7 +48,7 @@ public class PickupDuck : MonoBehaviour
 
     public void ChangeLast()
     {
-        if(lastDuck == null)
+        if (lastDuck == null)
         {
 
         }

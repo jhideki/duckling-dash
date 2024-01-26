@@ -24,13 +24,16 @@ public class FollowParent : MonoBehaviour
 
     private FollowParent firstDuck;
     private int deletedDuckCount = 0;
+    private DuckCounter duckCounter;
 
     // Update is called once per frame
     void Start()
     {
         spawnPoint = transform.position; // Set the spawn point
         randomTarget = GetRandomPositionInBox();
+        duckCounter = GameObject.Find("DuckCounter").GetComponent<DuckCounter>();
     }
+
 
     void FixedUpdate()
     {
@@ -82,51 +85,42 @@ public class FollowParent : MonoBehaviour
 
     public void StartFollowing(Transform newTarget)
     {
+        duckCounter.IncrementDuckCount();
         target = newTarget;
         isFollowing = true;
     }
 
     public void StopFollowing()
     {
-        Debug.Log("STOP FOLLOWING ME");
+        duckCounter.DecrementDuckCount();
         isFollowing = false;
         target = null;
 
-        
         // Disconnect from the previous duck
         if (previousDuck != null)
         {
             previousDuck.nextDuck = null;
         }
-        
+
 
         previousDuck = null;
-        
-
     }
 
     // Method to free and delete all objects in the chain
     public void FreeAndDeleteAllDucks(FollowParent duck)
     {
-        Debug.Log("FreeAndDeleteAllDucks called!");
-
         FollowParent currentDuck = duck;
-
         while (currentDuck != null)
         {
-            Debug.Log("NOT NULLL");
             FollowParent prevDuck = currentDuck.GetPreviousDuck();
             FollowParent nextDuck = currentDuck.GetNextDuck();
 
             currentDuck = prevDuck;
             Destroy(nextDuck.gameObject); // Destroy the GameObject associated with the FollowParent script
-
             deletedDuckCount++;
-          
         }
-
-        Debug.Log("Deleted " + deletedDuckCount + " ducks.");
     }
+
 
     // Method to set the first duck in the chain
     public void SetFirstDuck(FollowParent duck)
@@ -142,7 +136,7 @@ public class FollowParent : MonoBehaviour
 
     public void SetPreviousDuck(FollowParent duck)
     {
-       previousDuck = duck;
+        previousDuck = duck;
     }
 
     public FollowParent GetPreviousDuck()
@@ -152,7 +146,7 @@ public class FollowParent : MonoBehaviour
 
     public void SetNextDuck(FollowParent duck)
     {
-            nextDuck = duck;
+        nextDuck = duck;
     }
 
     public FollowParent GetNextDuck()
@@ -163,5 +157,5 @@ public class FollowParent : MonoBehaviour
     public bool IsFollowingPlayer()
     {
         return isFollowing;
-    } 
+    }
 }

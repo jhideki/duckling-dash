@@ -10,6 +10,7 @@ public class PlayerDown : MonoBehaviour
 
     // Time of the last hit
     private float lastHitTime = 0.0f;
+    public Score score;
 
     // OnTriggerEnter2D is called when a 2D collider enters a trigger collider
     void OnTriggerEnter2D(Collider2D other)
@@ -46,9 +47,6 @@ public class PlayerDown : MonoBehaviour
             }
         }
 
-        // Debug the number of ducks following the player
-        Debug.Log("Number of Ducks Following the Player: " + followingCount);
-
         // Check if the player has no ducks following
         if (followingCount == 0)
         {
@@ -67,6 +65,10 @@ public class PlayerDown : MonoBehaviour
 
     void LoadGameOverScene()
     {
+
+        DuckCounter duckCounter = GameObject.Find("DuckCounter").GetComponent<DuckCounter>();
+        score.intValue = duckCounter.GetScore();
+
         // You need to replace "YourGameOverSceneName" with the actual name or index of your game over scene
         SceneManager.LoadScene("Intro");
     }

@@ -112,6 +112,7 @@ MonoBehaviour:
   isFollowing: 0
   boxSize: 4
   patrolDuration: 0.75
+  duckCounter: {fileID: 3615675275891114121, guid: 1741eb45118823240b23fd7c4b25cde4, type: 3}
 --- !u!50 &1109600515340941096
 Rigidbody2D:
   serializedVersion: 4

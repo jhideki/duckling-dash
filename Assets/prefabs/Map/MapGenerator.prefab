@@ -379,7 +379,8 @@ MonoBehaviour:
   minBushes: 5
   maxBushes: 8
   numHunters: 3
-  numWaterObjects: 30
+  numWaterObjects: 20
+  isLoading: 0
   wallGenerator: {fileID: 0}
 --- !u!114 &1280203465624272465
 MonoBehaviour:
