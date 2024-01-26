@@ -10,9 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3092866781945761445}
   - component: {fileID: 3031077564918499561}
-  - component: {fileID: 3257912742844552133}
   - component: {fileID: -419336311019732553}
-  - component: {fileID: 3351768491442885041}
   - component: {fileID: 2618719206367619536}
   - component: {fileID: 8550303159176326271}
   - component: {fileID: -1896483466022375611}
@@ -92,25 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3257912742844552133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3909654939896017668}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb03cfe46c62a574ab1e704e2d5c3782, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  patrolSpeed: 0.6
-  patrolRadius: 7
-  visionRange: 3
-  attackCooldown: 5
-  currentCooldown: 0
-  attackSpeed: 5.5
-  distance: 0.1
 --- !u!114 &-419336311019732553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,33 +119,6 @@ MonoBehaviour:
   - {fileID: -1081639279, guid: e5608b13becbc4c478b537fe3e09100e, type: 3}
   frameRate: 5
   changeCutoff: 0
---- !u!50 &3351768491442885041
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3909654939896017668}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!58 &2618719206367619536
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -196,7 +148,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.0014858246, y: 0.021061063}
@@ -352,8 +304,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4dd5e01061cc548add5249e8f94865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 2
   rotationSpeed: 1
-  detectionRadius: 5
+  detectionRadius: 3
   attackDuration: 2
   resumeRotationDelay: 2
+  boxSize: 2
+  patrolDuration: 1

@@ -85,6 +85,11 @@ public class FollowParent : MonoBehaviour
 
     public void StartFollowing(Transform newTarget)
     {
+        PickupDuck pickupDuck = newTarget.GetComponent<PickupDuck>();
+        if (duckCounter.GetNumDucks() == 0)
+        {
+            pickupDuck.firstDuck = this;
+        }
         duckCounter.IncrementDuckCount();
         target = newTarget;
         isFollowing = true;

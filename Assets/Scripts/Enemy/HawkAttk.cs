@@ -5,35 +5,34 @@ using UnityEngine;
 public class HawkAttk : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float rotationSpeed = 2f;
+
     public float detectionRadius = 5f;
-    public float attackDuration = 2f;  // Duration to fly towards the player
-    public float resumeRotationDelay = 2f;  // Delay before resuming circular pattern
-
-
-    private Vector2 center;
-    private float angle = 0f;
 
     private Hiding hiding;
     private DuckCounter duckcounter;
     private Transform target;
+    private Vector3 spawnPoint;
+    private Vector3 randomTarget; // Store random target position within the box
+
+    public float boxSize = 2.0f; // Default box size
+    private float patrolTimer = 0.0f;
+    public float patrolDuration = 1.0f; // Minimum time to patrol in one direction
 
     private void Start()
     {
-        
-        center = transform.position;
+
+        spawnPoint = transform.position;
         duckcounter = GameObject.Find("DuckCounter").GetComponent<DuckCounter>();
+        randomTarget = GetRandomPositionInBox();
     }
 
     private void Update()
     {
-        FlyInPattern();
 
         if (DetectPlayer() && (!hiding.GetHiding()))
         {
             if (duckcounter.GetNumDucks() > 0)
             {
-                Debug.Log("Found Ducks");
                 AttackDuck();
             }
             else
@@ -41,21 +40,31 @@ public class HawkAttk : MonoBehaviour
                 AttackPlayer();
             }
         }
+        else
+        {
+            FlyInPattern();
+        }
 
     }
 
-    
+
     private void FlyInPattern()
     {
-        angle += rotationSpeed * Time.deltaTime;
-
-        // Update the position based on a circular pattern
-        float x = center.x + Mathf.Cos(angle) * detectionRadius;
-        float y = center.y + Mathf.Sin(angle) * detectionRadius;
-
-        transform.position = new Vector2(x, y);
+        // If not following, move randomly within the adjustable box centered around the spawn point
+        if (patrolTimer < patrolDuration)
+        {
+            // Move in the chosen direction for at least 1 second
+            transform.position = Vector3.Lerp(transform.position, randomTarget, moveSpeed * Time.deltaTime);
+            patrolTimer += Time.deltaTime;
+        }
+        else
+        {
+            // If the patrol duration is reached, choose a new random target
+            randomTarget = GetRandomPositionInBox();
+            patrolTimer = 0.0f;
+        }
     }
-    
+
 
     private bool DetectPlayer()
     {
@@ -75,17 +84,28 @@ public class HawkAttk : MonoBehaviour
 
         return false;
     }
+    private Vector3 GetRandomPositionInBox()
+    {
+        float x = Random.Range(spawnPoint.x, spawnPoint.x + boxSize);
+        float y = Random.Range(spawnPoint.y, spawnPoint.y + boxSize);
 
-    
+        return new Vector3(x, y, 0);
+    }
+
+    public void SetBoxSize(float newSize)
+    {
+        boxSize = Mathf.Max(newSize, 0.1f); // Ensure that box size is at least 0.1 to prevent division by zero
+    }
+
+
     private void AttackPlayer()
     {
-        // Your attack logic here
-        Debug.Log("Player detected! Attack!");
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         if (player != null)
         {
+            // Your attack logic here
             // Move towards the player's position in a straight line
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
 
@@ -99,7 +119,7 @@ public class HawkAttk : MonoBehaviour
             }
         }
     }
-    
+
 
     private void AttackDuck()
     {
@@ -124,7 +144,7 @@ public class HawkAttk : MonoBehaviour
                     // Stop following and destroy the duck GameObject
                     followParent.StopFollowing();
                     Destroy(followParent.gameObject);
-                    
+
                 }
                 else
                 {

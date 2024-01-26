@@ -421,6 +421,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BGmusic
       objectReference: {fileID: 0}
+    - target: {fileID: 5603643535261839710, guid: 815a8c3ce5117e542a816823fa421f55, type: 3}
+      propertyPath: m_Volume
+      value: 0.103
+      objectReference: {fileID: 0}
+    - target: {fileID: 5603643535261839710, guid: 815a8c3ce5117e542a816823fa421f55, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 5237950385233627993, guid: 1960c55fb8db78940a198137d6ffea2b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

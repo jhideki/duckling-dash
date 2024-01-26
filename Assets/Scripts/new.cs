@@ -44,7 +44,8 @@ public class StashDuck : MonoBehaviour
         if (followParent != null)
         {
             followParent.FreeAndDeleteAllDucks(followParent.GetPreviousDuck());
-            Destroy(followParent.transform.gameObject);
+            FollowParent firstDuck = pickupDuck.firstDuck;
+            Destroy(firstDuck.gameObject);
         }
 
     }

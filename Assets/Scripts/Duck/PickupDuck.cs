@@ -5,12 +5,16 @@ using UnityEngine;
 public class PickupDuck : MonoBehaviour
 {
     public FollowParent lastDuck;
+    public FollowParent firstDuck;
+    private DuckCounter duckCounter;
+    public AudioSource audioSource;
     // Start is called before the first frame update
 
     void Start()
     {
         lastDuck = null;
 
+        duckCounter = GameObject.Find("DuckCounter").GetComponent<DuckCounter>();
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -26,6 +30,8 @@ public class PickupDuck : MonoBehaviour
         FollowParent followScript = duck.GetComponent<FollowParent>();
         if (followScript != null && !followScript.isFollowing)
         {
+
+            audioSource.Play();
             if (lastDuck == null)
             {
                 followScript.StartFollowing(transform);
@@ -41,6 +47,7 @@ public class PickupDuck : MonoBehaviour
             // Add debug statements to check the linked list
 
             lastDuck = followScript;
+
         }
 
 

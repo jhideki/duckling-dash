@@ -11,8 +11,9 @@ public class EnemyShooting : MonoBehaviour
 
     private float timer;
     private Hiding hiding;
+    public AudioSource audioSource;
 
-   
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,16 +39,16 @@ public class EnemyShooting : MonoBehaviour
                 {
                     timer = 0;
 
-                    if(closestTarget.CompareTag("Player"))
+                    if (closestTarget.CompareTag("Player"))
                     {
                         shoot(closestTarget);
                     }
-                    
+
                     else if (closestTarget && followParent.isFollowing)
                     {
                         shoot(closestTarget);
                     }
-                    
+
                 }
             }
         }
@@ -55,6 +56,7 @@ public class EnemyShooting : MonoBehaviour
 
     void shoot(GameObject target)
     {
+        audioSource.Play();
         // Instantiate the middle bullet
         InstantiateBullet(Vector3.zero, target.transform.position - bulletPos.position);
 

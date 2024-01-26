@@ -10,9 +10,12 @@ public class LoadingScreen : MonoBehaviour
     public float fadeDuration = 2f;
     private Transform loading;
     public GameObject canvasGroup;
+    public Transform player;
+    private Movement movement;
     void Start()
     {
         canvasGroup.SetActive(false);
+        movement = player.GetComponent<Movement>();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         loading = transform.GetChild(0);
@@ -21,9 +24,15 @@ public class LoadingScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        movement.canMove = false;
+
         if (!generator.isLoading)
         {
-            Destroy(loading.gameObject);
+            if (loading.gameObject != null)
+            {
+                //Destroy(loading.gameObject);
+                loading.gameObject.SetActive(false);
+            }
             StartCoroutine(FadeToTransparentCoroutine());
         }
     }
@@ -52,6 +61,7 @@ public class LoadingScreen : MonoBehaviour
         // Make sure the sprite is completely transparent at the end
         spriteRenderer.color = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
         canvasGroup.SetActive(true);
+        movement.canMove = true;
 
         Destroy(gameObject);
 
