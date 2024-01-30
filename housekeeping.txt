@@ -1,5 +1,0 @@
-- always place files in subfolders (especially scripts)
-- each script should do one main thing (don't add new features to existing scripts)
-- funciton and class names should be camelcase and start with a capital letter (ThisIsAFunction)
-- variable names should be normal camelcase (thisIsAVariable)
-- before you commit remove any debug statements
