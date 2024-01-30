@@ -11,7 +11,7 @@ Beware of predators and hunters!
 
 Play around with the Tab and Space keys to try and survive and collect as many ducklings as you can.
 
-###Credits:
+### Credits:
 Developed by johnnyfriend, pogchamp22, and sover
 
 Music composed by johnnyfriend
