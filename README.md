@@ -12,7 +12,7 @@ Beware of predators and hunters!
 Play around with the Tab and Space keys to try and survive and collect as many ducklings as you can.
 
 ### Credits:
-Developed by [Jonathan](https://github.com/jonathan-ami), [pgchmp](https://johnnyfriend.itch.io/dukcy-test), and [Kyunje](https://github.com/Kyunje)
+Developed by [johnny](https://github.com/jonathan-ami), [pgchmp](https://johnnyfriend.itch.io/dukcy-test), and [Kyunje](https://github.com/Kyunje)
 
 Music composed by [johnnyfriend](https://www.youtube.com/channel/UC8G27AXnD6igNNpVGhZ6rHg)
 
