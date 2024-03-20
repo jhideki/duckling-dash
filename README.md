@@ -24,7 +24,7 @@ Music composed by [johnnyfriend](https://www.youtube.com/channel/UC8G27AXnD6igNN
 ### Installation:
 1. Clone this repository to your local machine.
 ```bash
-   git clone https://github.com/jonathan-ami/duckling-dash.git
+   git clone https://github.com/jhideki/duckling-dash.git
 ```
 2. Open the project in Unity (Version 2022.3.1 recommended).
 3. Run the game in the Unity Editor or build the game for your desired platform.
